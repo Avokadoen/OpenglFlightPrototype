@@ -1,10 +1,28 @@
 #include "mesh.hpp"
+#include <iostream>
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+Material::Material() {
+	ambient = glm::vec3(0.0f);
+	diffuse = glm::vec3(0.0f);
+	specular = glm::vec3(0.0f);
+	shininess = 1;
+}
+
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material material)
 {
+	// check model material if valid
+	if (material.shininess == 0) {
+		material.shininess = 1.0f;
+	}
+	if (textures.size() <= 0 &&
+		material.specular.x == 0 && material.specular.y == 0 && material.specular.z == 0) {
+		material.specular = glm::vec3(0.1f);
+	}
+
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
+	this->material = material;
 
 	setupMesh();
 }
@@ -53,8 +71,8 @@ void Mesh::Draw(Shader shader)
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
-										  // retrieve texture number (the N in diffuse_textureN)
-		std::string number;
+										  
+		std::string number;						// retrieve texture number (the N in diffuse_textureN)
 		std::string name = textures[i].type;
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
@@ -66,16 +84,27 @@ void Mesh::Draw(Shader shader)
 			number = std::to_string(heightNr++); // transfer unsigned int to stream
 
 												 // now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+		glUniform1i(glGetUniformLocation(shader.ID, (name + "[" + number + "]").c_str()), i);
+
 		// and finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
+
+	shader.setInt("diffuseCount", diffuseNr - 1);
+	shader.setInt("specularCount", specularNr - 1);
+
+	shader.setVec3("material.ambient", material.ambient);
+	shader.setVec3("material.diffuse", material.diffuse);
+	shader.setVec3("material.specular", material.specular);
+	shader.setFloat("material.shininess", material.shininess);
 
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
 
-	// always good practice to set everything back to defaults once configured.
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
+	
 }

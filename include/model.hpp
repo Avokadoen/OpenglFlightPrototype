@@ -15,7 +15,7 @@
 #include "gtc/type_ptr.hpp"
 
 // TODO: RIP APART!!! (modularity.)
-// TODO: Transform set
+
 
 
 class Model

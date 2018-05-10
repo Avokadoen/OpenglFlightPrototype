@@ -19,7 +19,6 @@ void Model::Draw(Shader shader)
 		meshes[i].Draw(shader);
 }
 
-
 glm::mat4 Model::getTransform() {
 	return transform;
 }
@@ -43,7 +42,8 @@ void Model::loadModel(std::string path)
 	transform = glm::mat4(1.0f);
 
 	Assimp::Importer import;
-	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+	const aiScene *scene = import.ReadFile(path, 
+		aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_Quality);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -92,10 +92,15 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		vector.z = mesh->mVertices[i].z;
 		vertex.Position = vector;
 		// normals
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.Normal = vector;
+		vertex.Normal = glm::vec3(0);
+		if (mesh->HasNormals()) {
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+		}
+
+		
 		// texture coordinates
 		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
@@ -122,12 +127,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	}
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-	// Same applies to other texture as the following list summarizes:
-	// diffuse: texture_diffuseN
-	// specular: texture_specularN
-	// normal: texture_normalN
 
 	// 1. diffuse maps
 	std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
@@ -142,8 +141,14 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
+	// Retrieve material data incase it doesn't use textures
+	Material meshMaterial;
+	material->Get(AI_MATKEY_COLOR_AMBIENT, meshMaterial.ambient);
+	material->Get(AI_MATKEY_COLOR_DIFFUSE, meshMaterial.diffuse);
+	material->Get(AI_MATKEY_COLOR_SPECULAR, meshMaterial.specular);
+	material->Get(AI_MATKEY_SHININESS, meshMaterial.shininess);
 	// return a mesh object created from the extracted mesh data
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, meshMaterial);
 }
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.

@@ -5,6 +5,34 @@
 #include "camera.hpp"
 #include "model.hpp"
 
+void testLight(Shader& shader) {
+
+	shader.setBool("dirSet", true);
+	shader.setVec3("dirLight.direction", glm::vec3(1.0f, -1.0f, -0.3f));
+	shader.setVec3("dirLight.ambient", glm::vec3(0.1f, 0.05f, 0.05f));
+	shader.setVec3("dirLight.diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
+	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
+
+
+
+
+	// LIGHT CLASS STUFF
+	/*shader.setBool("light.isDirection", lightToggle);
+	shader.setVec3("light.position", camera.Position);
+	shader.setVec3("light.direction", camera.Front);
+	shader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+	shader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+	shader.setVec3("light.ambient", 0.05f, 0.05f, 0.05f);
+	shader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+	shader.setVec3("light.specular", 0.5f, 0.5f, 0.5f);
+
+	// light 600 distance
+
+	shader.setFloat("light.constant", 1.0f);
+	shader.setFloat("light.linear", 0.007);
+	shader.setFloat("light.quadratic", 0.0002);
+	shader.setVec3("viewPos", camera.Position);*/
+}
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void error_callback(int error, const char* description);
@@ -14,8 +42,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 900;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
@@ -26,6 +54,8 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+bool lightToggle = false;
 
 int main() {
 
@@ -42,7 +72,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "framework", nullptr, nullptr); // glfwGetPrimaryMonitor()
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "framework", glfwGetPrimaryMonitor(), nullptr); // glfwGetPrimaryMonitor()
 	if (!window)
 	{
 		// Window or OpenGL context creation failed
@@ -86,7 +116,8 @@ int main() {
 	glfwSwapInterval(1);
 
 	Model model("assets/models/old\ man/muro.obj");
-	Model model2("assets/models/old\ man/muro.obj");
+	Model model2("assets/models/nano/nanosuit.obj");
+	Model city("assets/models/box.obj");
 	Shader shader("shaders/testvertex.vert", "shaders/testfragment.frag");
 	
 	float lastFrame = 0;
@@ -98,7 +129,8 @@ int main() {
 																	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 	
-	model.scale(0.1f);
+	city.scale(0.1f);
+	city.translate(glm::vec3(-150, -1050, 500));
 
 	float lightX = 0;
 	
@@ -110,32 +142,39 @@ int main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		shader.use();
-
 		// render
 		// ------
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// LIGHT CLASS STUFF
-		shader.setFloat("ambientStrength", 0.2f);
-		shader.setVec3("light.position", 20, 30, 10);
-		shader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		shader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		shader.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
-		shader.setVec3("viewPos", camera.Position);
+		shader.use();
+	
+		testLight(shader);
+
+		shader.setInt("spotCount", 1);
+		shader.setVec3("spotLight[0].position", camera.Position);
+		shader.setVec3("spotLight[0].direction", camera.Front);
+		shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+		shader.setVec3("spotLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+		shader.setVec3("spotLight[0].specular", glm::vec3(0.6f, 0.6f, 0.6f));
+		shader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(16.0f)));
+		shader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
+		shader.setFloat("spotLight[0].constant", 1.0f);
+		shader.setFloat("spotLight[0].linear", 0.007);
+		shader.setFloat("spotLight[0].quadratic", 0.0002);
 
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
-		model.translate(glm::vec3(-20 * deltaTime, 0, 0));
-		model.rotate(40 * deltaTime, glm::vec3(0, 1, 0));
+		//model.translate(glm::vec3(-20 * deltaTime, 0, 0));
+		//model.rotate(40 * deltaTime, glm::vec3(0, 1, 0));
 		shader.setMat4("model", model.getTransform());
 		model.Draw(shader);
 		shader.setMat4("model", model2.getTransform());
 		model2.Draw(shader);
-
+		shader.setMat4("model", city.getTransform());
+		city.Draw(shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -167,6 +206,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+		
 }
 
 
