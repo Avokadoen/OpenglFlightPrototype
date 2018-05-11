@@ -25,6 +25,8 @@ inline int GetFileLength(std::istream& file)
 Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight = maxHeight;
 	this->blockScale = blockScale;
+	yOffset = 0;
+	yScale = 1;
 }
 
 bool Terrain::generateHeightValues() {
@@ -166,14 +168,7 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 		vertices[indices[i + 2]].Normal = normals[i];
 	}
 
-	std::vector<Texture> t;
-	Material mat;
-	mat.ambient = glm::vec3(0.2, 0.2, 0.2);
-	mat.diffuse = glm::vec3(1, 0.2, 0.5);
-	mat.specular = glm::vec3(0.2, 0.2, 0.2);
-	mat.shininess = 32.0f;
-
-	Mesh mesh(vertices, indices, t, mat);
+	Mesh mesh(vertices, indices);
 	meshes.push_back(mesh);
 }
 
@@ -230,30 +225,62 @@ std::vector<glm::vec3>	Terrain::generateNormals(std::vector<Vertex>& vertices, s
 }
 
 void Terrain::bindMaterialsToShader(Shader shader) {
-
-	shader.setVec3("water.ambient", water.ambient);
-	shader.setVec3("water.diffuse", water.diffuse);
-	shader.setVec3("water.specular", water.specular);
-	shader.setFloat("water.shininess", water.shininess);
-
-	shader.setVec3("mud.ambient", mud.ambient);
-	shader.setVec3("mud.diffuse", mud.diffuse);
-	shader.setVec3("mud.specular", mud.specular);
-	shader.setFloat("mud.shininess", mud.shininess);
-
-	shader.setVec3("grass.ambient", grass.ambient);
-	shader.setVec3("grass.diffuse", grass.diffuse);
-	shader.setVec3("grass.specular", grass.specular);
-	shader.setFloat("grass.shininess", grass.shininess);
-
-	shader.setVec3("stone.ambient", stone.ambient);
-	shader.setVec3("stone.diffuse", stone.diffuse);
-	shader.setVec3("stone.specular", stone.specular);
-	shader.setFloat("stone.shininess", stone.shininess);
+	shader.setFloat("maxHeight", maxHeight);
+	shader.setFloat("yScale", yScale);
+	shader.setFloat("yOffset", yOffset);
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
 	shader.setVec3("snow.specular", snow.specular);
 	shader.setFloat("snow.shininess", snow.shininess);
+	shader.setFloat("snowStart", SnowStart);
+	shader.setFloat("snowEnd", SnowEnd);
 
+	shader.setVec3("stone.ambient", stone.ambient);
+	shader.setVec3("stone.diffuse", stone.diffuse);
+	shader.setVec3("stone.specular", stone.specular);
+	shader.setFloat("stone.shininess", stone.shininess);
+	shader.setFloat("stoneStart", StoneStart);
+	shader.setFloat("stoneEnd", StoneEnd);
+
+	shader.setVec3("grass.ambient", grass.ambient);
+	shader.setVec3("grass.diffuse", grass.diffuse);
+	shader.setVec3("grass.specular", grass.specular);
+	shader.setFloat("grass.shininess", grass.shininess);
+	shader.setFloat("grassStart", GrassStart);
+	shader.setFloat("grassEnd", GrassEnd);
+
+	shader.setVec3("mud.ambient", mud.ambient);
+	shader.setVec3("mud.diffuse", mud.diffuse);
+	shader.setVec3("mud.specular", mud.specular);
+	shader.setFloat("mud.shininess", mud.shininess);
+	shader.setFloat("mudStart", MudStart);
+	shader.setFloat("mudEnd", MudEnd);
+
+	shader.setVec3("water.ambient", water.ambient);
+	shader.setVec3("water.diffuse", water.diffuse);
+	shader.setVec3("water.specular", water.specular);
+	shader.setFloat("water.shininess", water.shininess);
+	shader.setFloat("waterEnd", WaterEnd);
+
+}
+
+void Terrain::scale(glm::vec3 scale) {
+	Model::scale(scale);
+
+	// save scale for color placement in shader
+	yScale = scale.y;
+}
+
+void Terrain::scale(float scale) {
+	Model::scale(scale);
+
+	// save scale for color placement in shader
+	yScale = scale;
+}
+
+void Terrain::translate(glm::vec3 offset) {
+	Model::translate(offset);
+
+	yOffset = offset.y;
 }

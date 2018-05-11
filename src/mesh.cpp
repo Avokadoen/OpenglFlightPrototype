@@ -35,6 +35,13 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	setupMesh();
 }
 
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
+	this->vertices = vertices;
+	this->indices = indices;
+
+	setupMesh();
+}
+
 void Mesh::setupMesh()
 {
 	  // create buffers/arrays
