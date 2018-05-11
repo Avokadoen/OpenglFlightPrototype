@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+
+
 inline float GetPercentage(float value, const float min, const float max)
 {
 	value = glm::clamp(value, min, max);
@@ -227,3 +229,31 @@ std::vector<glm::vec3>	Terrain::generateNormals(std::vector<Vertex>& vertices, s
 	return normals;
 }
 
+void Terrain::bindMaterialsToShader(Shader shader) {
+
+	shader.setVec3("water.ambient", water.ambient);
+	shader.setVec3("water.diffuse", water.diffuse);
+	shader.setVec3("water.specular", water.specular);
+	shader.setFloat("water.shininess", water.shininess);
+
+	shader.setVec3("mud.ambient", mud.ambient);
+	shader.setVec3("mud.diffuse", mud.diffuse);
+	shader.setVec3("mud.specular", mud.specular);
+	shader.setFloat("mud.shininess", mud.shininess);
+
+	shader.setVec3("grass.ambient", grass.ambient);
+	shader.setVec3("grass.diffuse", grass.diffuse);
+	shader.setVec3("grass.specular", grass.specular);
+	shader.setFloat("grass.shininess", grass.shininess);
+
+	shader.setVec3("stone.ambient", stone.ambient);
+	shader.setVec3("stone.diffuse", stone.diffuse);
+	shader.setVec3("stone.specular", stone.specular);
+	shader.setFloat("stone.shininess", stone.shininess);
+
+	shader.setVec3("snow.ambient", snow.ambient);
+	shader.setVec3("snow.diffuse", snow.diffuse);
+	shader.setVec3("snow.specular", snow.specular);
+	shader.setFloat("snow.shininess", snow.shininess);
+
+}

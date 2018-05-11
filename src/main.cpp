@@ -8,13 +8,21 @@
 
 void testLight(Shader& shader) {
 
-	shader.setBool("dirSet", true);
+	/*shader.setBool("dirSet", true);
 	shader.setVec3("dirLight.direction", glm::vec3(1.0f, -1.0f, -0.3f));
 	shader.setVec3("dirLight.ambient", glm::vec3(0.1f, 0.05f, 0.05f));
 	shader.setVec3("dirLight.diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
+	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));*/
 
-
+	shader.setInt("spotCount", 1);
+	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	shader.setVec3("spotLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setVec3("spotLight[0].specular", glm::vec3(0.6f, 0.6f, 0.6f));
+	shader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(16.0f)));
+	shader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
+	shader.setFloat("spotLight[0].constant", 1.0f);
+	shader.setFloat("spotLight[0].linear", 0.007);
+	shader.setFloat("spotLight[0].quadratic", 0.0002);
 
 
 	// LIGHT CLASS STUFF
@@ -132,7 +140,9 @@ int main() {
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 
 	float lightX = 0;
-	
+	terrainShader.use();
+	terrain.bindMaterialsToShader(terrainShader);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -149,29 +159,24 @@ int main() {
 		shader.use();
 	
 		testLight(shader);
-
-		shader.setInt("spotCount", 1);
 		shader.setVec3("spotLight[0].position", camera.Position);
 		shader.setVec3("spotLight[0].direction", camera.Front);
-		shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-		shader.setVec3("spotLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-		shader.setVec3("spotLight[0].specular", glm::vec3(0.6f, 0.6f, 0.6f));
-		shader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(16.0f)));
-		shader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
-		shader.setFloat("spotLight[0].constant", 1.0f);
-		shader.setFloat("spotLight[0].linear", 0.007);
-		shader.setFloat("spotLight[0].quadratic", 0.0002);
-
+	
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 		plane.Draw(shader);
 
-		//terrainShader.use();
-		//terrainShader.setMat4("projection", projection);
-		//terrainShader.setMat4("view", view);
-		//terrainShader.setVec3("lightPos", camera.Position);
-		terrain.Draw(shader);
+		terrainShader.use();
+
+		testLight(terrainShader);
+		terrainShader.setVec3("spotLight[0].position", camera.Position);
+		terrainShader.setVec3("spotLight[0].direction", camera.Front);
+	
+		terrainShader.setMat4("projection", projection);
+		terrainShader.setMat4("view", view);
+		terrainShader.setVec3("lightPos", camera.Position);
+		terrain.Draw(terrainShader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -22,13 +22,52 @@ public:
 	void freeImageData();
 	bool generateHeightValues();
 	void createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor);
+	void bindMaterialsToShader(Shader shader);
+protected:
+
+	const Material snow = {
+		glm::vec3(0.6, 0.6, 0.67),
+		glm::vec3(0.9, 0.9, 1.0),
+		glm::vec3(0.5, 0.5, 0.5),
+		32.0f
+	};
+
+	const Material stone = {
+		glm::vec3(0.2, 0.2, 0.2),
+		glm::vec3(0.4, 0.4, 0.4),
+		glm::vec3(0.05, 0.05, 0.05),
+		16.0f
+	};
+
+	const Material grass = {
+		glm::vec3(0.1, 0.3, 0.1),
+		glm::vec3(0.2, 0.6, 0.2),
+		glm::vec3(0.05, 0.05, 0.05),
+		16.0f
+	};
+
+	const Material mud = {
+		glm::vec3(0.4, 0.2, 0.05),
+		glm::vec3(0.8, 0.4, 0.1),
+		glm::vec3(0.2, 0.2, 0.2),
+		8.0f
+	};
+
+	const Material water = {
+		glm::vec3(0.1, 0.1, 0.3),
+		glm::vec3(0.2, 0.2, 0.6),
+		glm::vec3(0.5, 0.5, 0.5),
+		64.0f
+	};
+
 private:
 	std::vector<unsigned int> generateIndices();
 	std::vector<glm::vec3>	generateNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 	std::vector<float>	heightValues;
 
+	
+
 	unsigned int maxHeight;
 	float blockScale;
 	unsigned int heightoffset;
-
 };

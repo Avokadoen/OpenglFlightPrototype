@@ -13,6 +13,8 @@ struct Material {
 	float shininess;
 
 	Material();
+	Material(glm::vec3 ambient, glm::vec3 diffuse, 
+			glm::vec3 specular,float shininess);
 };
 
 class Mesh {

@@ -8,6 +8,14 @@ Material::Material() {
 	shininess = 1;
 }
 
+Material::Material(glm::vec3 ambient, glm::vec3 diffuse,
+	glm::vec3 specular, float shininess) {
+	this->ambient	= ambient;
+	this->diffuse	= diffuse;
+	this->specular	= specular;
+	this->shininess = shininess;
+}
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material material)
 {
 	// check model material if valid
