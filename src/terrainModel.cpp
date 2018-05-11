@@ -34,7 +34,7 @@ bool Terrain::generateHeightValues() {
 		// iterate through image
 		for (int y = 0; y < imageHeight; y++) {
 			for (int x = 0; x < imageWidth; x++) {
-				heightValues.push_back(GetHeightValue(imageData +(x + imageWidth * y)));
+				heightValues.push_back(GetHeightValue(imageData +(x + imageWidth * y) * nrComponents));
 			}
 		}
 
@@ -67,6 +67,11 @@ float Terrain::GetHeightValue(const unsigned char* data)
 		return (unsigned short)(data[1] << 8 | data[0]) / (float)0xffff;
 	}
 	break;
+	case 3:
+	{
+		return (unsigned int)(data[2] << 16 | data[1] << 8 | data[0]) / (float)0xffffff;
+	}
+	break;
 	case 4:
 	{
 		return (unsigned int)(data[3] << 24 | data[2] << 16 | data[1] << 8 | data[0]) / (float)0xffffffff;
@@ -88,8 +93,6 @@ float Terrain::GetHeightValue(const unsigned char* data)
 bool Terrain::loadHeightMapData(const char *path)
 {
 
-
-	
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
@@ -103,8 +106,8 @@ bool Terrain::loadHeightMapData(const char *path)
 			format = GL_RED;
 		else if (nrComponents == 2)
 			format = GL_RG;
-		//else if (nrComponents == 3)
-			//format = GL_RGB;
+		else if (nrComponents == 3)
+			format = GL_RGB;
 		else if (nrComponents == 4)
 			format = GL_RGBA;
 
@@ -152,22 +155,28 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 			vertices.push_back(vboData);
 		}
 	}
-
-
 	indices = generateIndices();
+	std::vector<glm::vec3> normals = generateNormals(vertices, indices);
+
+	for (int i = 0; i < vertices.size(); i += 3) {
+		vertices[indices[i]].Normal = normals[i];
+		vertices[indices[i + 1]].Normal = normals[i];
+		vertices[indices[i + 2]].Normal = normals[i];
+	}
 
 	std::vector<Texture> t;
 	Material mat;
+	mat.ambient = glm::vec3(0.2, 0.2, 0.2);
+	mat.diffuse = glm::vec3(1, 0.2, 0.5);
+	mat.specular = glm::vec3(0.2, 0.2, 0.2);
+	mat.shininess = 32.0f;
+
 	Mesh mesh(vertices, indices, t, mat);
 	meshes.push_back(mesh);
 }
 
 std::vector<unsigned int> Terrain::generateIndices() {
-	/*if (m_HeightmapDimensions.x < 2 || m_HeightmapDimensions.y < 2)
-	{
-		// Terrain hasn't been loaded, or is of an incorrect size
-		return;
-	}*/
+	
 
 	// 2 triangles for every quad of the terrain mesh
 	const unsigned int numTriangles = (imageWidth - 1) * (imageHeight - 1) * 2;
@@ -194,3 +203,27 @@ std::vector<unsigned int> Terrain::generateIndices() {
 	}
 	return indices;
 }
+
+std::vector<glm::vec3>	Terrain::generateNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
+	std::vector<glm::vec3> normals;
+	normals.resize(vertices.size());
+	for (unsigned int i = 0; i < vertices.size(); i += 3)
+	{
+		glm::vec3 v0 = vertices[indices[i + 0]].Position;
+		glm::vec3 v1 = vertices[indices[i + 1]].Position;
+		glm::vec3 v2 = vertices[indices[i + 2]].Position;
+
+		glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+		normals[indices[i + 0]] += normal;
+		normals[indices[i + 1]] += normal;
+		normals[indices[i + 2]] += normal;
+	}
+
+	for(auto&& normal : normals){
+		normal = glm::normalize(normal);
+	}
+
+	return normals;
+}
+

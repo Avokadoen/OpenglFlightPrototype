@@ -167,10 +167,11 @@ int main() {
 		shader.setMat4("view", view);
 		plane.Draw(shader);
 
-		terrainShader.use();
-		terrainShader.setMat4("projection", projection);
-		terrainShader.setMat4("view", view);
-		terrain.Draw(terrainShader);
+		//terrainShader.use();
+		//terrainShader.setMat4("projection", projection);
+		//terrainShader.setMat4("view", view);
+		//terrainShader.setVec3("lightPos", camera.Position);
+		terrain.Draw(shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -24,7 +24,8 @@ public:
 	void createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor);
 private:
 	std::vector<unsigned int> generateIndices();
-	std::vector<float> heightValues;
+	std::vector<glm::vec3>	generateNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	std::vector<float>	heightValues;
 
 	unsigned int maxHeight;
 	float blockScale;
