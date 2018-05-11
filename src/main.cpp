@@ -116,10 +116,12 @@ int main() {
 	glfwSwapInterval(1);
 
 	Terrain terrain;
-	terrain.loadHeightMap("assets/heightmap/height100.png");
+	terrain.loadHeightMapData("assets/heightmap/height100.png");
+	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	loadedModel plane("assets/model/ask21mi.obj");
 
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
+	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
 	
 	float lastFrame = 0;
 
@@ -166,7 +168,13 @@ int main() {
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
+
 		plane.Draw(shader);
+
+		terrainShader.use();
+		terrainShader.setMat4("projection", projection);
+		terrainShader.setMat4("view", view);
+		terrain.Draw(terrainShader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

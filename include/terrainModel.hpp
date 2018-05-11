@@ -4,23 +4,30 @@
 #include "model.hpp"
 #include "stb_image.h"
 
-class Terrain : Model
+class Terrain : public Model
 {
 public:
 
-	Terrain(float heightScale = 500.0f, float blockScale = 2.0f);
-
-	bool loadHeightMap(const char *path);
-	void freeImageData();
-	bool generateHeightValue();
+	Terrain(float maxHeight = 500.0f, float blockScale = 2.0f);
 
 	int nrComponents;
 	int imageWidth;
+	int imageHeight;
+
 	unsigned int fileSize;
 	unsigned char* imageData;
-	float GetHeightValue(const unsigned char* data);
 
+	float GetHeightValue(const unsigned char* data);
+	bool loadHeightMapData(const char *path);
+	void freeImageData();
+	bool generateHeightValues();
+	void createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor);
 private:
+	std::vector<unsigned int> generateIndices();
 	std::vector<float> heightValues;
+
+	unsigned int maxHeight;
+	float blockScale;
+	unsigned int heightoffset;
 
 };

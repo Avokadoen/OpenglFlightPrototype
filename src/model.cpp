@@ -7,8 +7,8 @@ Model::Model()
 void Model::Draw(Shader shader)
 {
 	shader.setMat4("model", transform);
-	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shader);
+	for(auto&& mesh : meshes)
+		mesh.Draw(shader);
 }
 
 glm::mat4 Model::getTransform() {
