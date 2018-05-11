@@ -14,7 +14,7 @@
 
 
 
-class loadedModel : Model
+class loadedModel : public Model
 {
 public:
 	/*  Functions   */

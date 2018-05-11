@@ -3,7 +3,8 @@
 #include "GLFW/glfw3.h"
 
 #include "camera.hpp"
-#include "model.hpp"
+#include "loadedModel.hpp"
+#include "terrainModel.hpp"
 
 void testLight(Shader& shader) {
 
@@ -72,7 +73,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "framework", glfwGetPrimaryMonitor(), nullptr); // glfwGetPrimaryMonitor()
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "framework", nullptr, nullptr); // glfwGetPrimaryMonitor()
 	if (!window)
 	{
 		// Window or OpenGL context creation failed
@@ -108,24 +109,22 @@ int main() {
 	}
 	
 
-
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
 	glfwSwapInterval(1);
 
+	Terrain terrain;
+	terrain.loadHeightMap("assets/heightmap/height100.png");
+	loadedModel plane("assets/model/ask21mi.obj");
 
-	Model model("assets/model/ask21mi.obj");
-
-	Shader shader("shaders/testvertex.vert", "shaders/testfragment.frag");
+	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	
 	float lastFrame = 0;
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
 																	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 	
@@ -167,9 +166,7 @@ int main() {
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
-		//;
-		//model.Draw(shader);
-
+		plane.Draw(shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
