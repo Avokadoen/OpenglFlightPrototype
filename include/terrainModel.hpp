@@ -36,8 +36,8 @@ protected:
 		glm::vec3(0.5, 0.5, 0.5),
 		32.0f
 	};
-	const float SnowStart = 0.85f;
-	const float SnowEnd = 1.0f;
+	const float SnowBottom = 0.85f;
+	const float SnowTop = 1.0f;
 
 	const Material stone = {
 		glm::vec3(0.2, 0.2, 0.2),
@@ -45,8 +45,8 @@ protected:
 		glm::vec3(0.05, 0.05, 0.05),
 		16.0f
 	};
-	const float StoneStart = 0.5f;
-	const float StoneEnd = 0.85f;
+	const float StoneBottom = 0.5f;
+	const float StoneTop = 0.85f;
 
 	const Material grass = {
 		glm::vec3(0.1, 0.3, 0.1),
@@ -54,8 +54,8 @@ protected:
 		glm::vec3(0.05, 0.05, 0.05),
 		16.0f
 	};
-	const float GrassStart = 0.1f;
-	const float GrassEnd = 0.5f;
+	const float GrassBottom = 0.1f;
+	const float GrassTop = 0.5f;
 
 
 	const Material mud = {
@@ -64,8 +64,8 @@ protected:
 		glm::vec3(0.2, 0.2, 0.2),
 		8.0f
 	};
-	const float MudStart = 0.05f;
-	const float MudEnd = 0.1f;
+	const float MudBottom = 0.05f;
+	const float MudTop = 0.1f;
 
 	const Material water = {
 		glm::vec3(0.1, 0.1, 0.3),
@@ -73,7 +73,7 @@ protected:
 		glm::vec3(0.5, 0.5, 0.5),
 		64.0f
 	};
-	const float WaterEnd = 0.05f;
+	const float WaterTop = 0.05f;
 
 private:
 	std::vector<unsigned int> generateIndices();

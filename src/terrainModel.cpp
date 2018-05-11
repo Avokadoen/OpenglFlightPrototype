@@ -5,28 +5,12 @@
 
 
 
-inline float GetPercentage(float value, const float min, const float max)
-{
-	value = glm::clamp(value, min, max);
-	return (value - min) / (max - min);
-}
-
-inline int GetFileLength(std::istream& file)
-{
-	int pos = file.tellg();
-	file.seekg(0, std::ios::end);
-	int length = file.tellg();
-	// Restore the position of the get pointer
-	file.seekg(pos);
-
-	return length;
-}
 
 Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight = maxHeight;
 	this->blockScale = blockScale;
-	yOffset = 0;
-	yScale = 1;
+	yOffset = 0.0f;
+	yScale = 1.0f;
 }
 
 bool Terrain::generateHeightValues() {
@@ -38,18 +22,11 @@ bool Terrain::generateHeightValues() {
 		// iterate through image
 		for (int y = 0; y < imageHeight; y++) {
 			for (int x = 0; x < imageWidth; x++) {
-				heightValues.push_back(GetHeightValue(imageData +(x + imageWidth * y) * nrComponents));
+				heightValues.push_back(GetHeightValue(imageData + (x + (imageWidth * y)) * nrComponents));
 			}
 		}
 
-		while ((index * nrComponents) < fileSize) {
-			
-			index++;
-		}
-
-		if (heightValues.size() == fileSize) {
-			return true;
-		}else return false;
+		return true;
 	}
 	else {
 		return false;
@@ -130,7 +107,9 @@ bool Terrain::loadHeightMapData(const char *path)
 		stbi_image_free(imageData);
 		return false;
 	}
-	generateHeightValues();
+	if (!generateHeightValues()) {
+		std::cout << "failed to generate height map" << std::endl;
+	}
 	//imageData = data;
 	return true;
 }
@@ -150,6 +129,8 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 			data.x = x * blockScale;
 			data.y = maxHeight * heightValues[(imageWidth*y)+x];
 			data.z = y * blockScale;
+
+			if (heightValues[(imageWidth*y) + x] > 0.5 || heightValues[(imageWidth*y) + x] < 0.05) std::cout << heightValues[(imageWidth*y) + x] << " ";
 
 			Vertex vboData;
 			vboData.Position	= data;
@@ -233,35 +214,35 @@ void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setVec3("snow.diffuse", snow.diffuse);
 	shader.setVec3("snow.specular", snow.specular);
 	shader.setFloat("snow.shininess", snow.shininess);
-	shader.setFloat("snowStart", SnowStart);
-	shader.setFloat("snowEnd", SnowEnd);
+	shader.setFloat("snowBottom", SnowBottom);
+	shader.setFloat("snowTop", SnowTop);
 
 	shader.setVec3("stone.ambient", stone.ambient);
 	shader.setVec3("stone.diffuse", stone.diffuse);
 	shader.setVec3("stone.specular", stone.specular);
 	shader.setFloat("stone.shininess", stone.shininess);
-	shader.setFloat("stoneStart", StoneStart);
-	shader.setFloat("stoneEnd", StoneEnd);
+	shader.setFloat("stoneBottom", StoneBottom);
+	shader.setFloat("stoneTop", StoneTop);
 
 	shader.setVec3("grass.ambient", grass.ambient);
 	shader.setVec3("grass.diffuse", grass.diffuse);
 	shader.setVec3("grass.specular", grass.specular);
 	shader.setFloat("grass.shininess", grass.shininess);
-	shader.setFloat("grassStart", GrassStart);
-	shader.setFloat("grassEnd", GrassEnd);
+	shader.setFloat("grassBottom", GrassBottom);
+	shader.setFloat("grassTop", GrassTop);
 
 	shader.setVec3("mud.ambient", mud.ambient);
 	shader.setVec3("mud.diffuse", mud.diffuse);
 	shader.setVec3("mud.specular", mud.specular);
 	shader.setFloat("mud.shininess", mud.shininess);
-	shader.setFloat("mudStart", MudStart);
-	shader.setFloat("mudEnd", MudEnd);
+	shader.setFloat("mudBottom", MudBottom);
+	shader.setFloat("mudTop", MudTop);
 
 	shader.setVec3("water.ambient", water.ambient);
 	shader.setVec3("water.diffuse", water.diffuse);
 	shader.setVec3("water.specular", water.specular);
 	shader.setFloat("water.shininess", water.shininess);
-	shader.setFloat("waterEnd", WaterEnd);
+	shader.setFloat("waterTop", WaterTop);
 
 }
 
