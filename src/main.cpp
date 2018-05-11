@@ -115,9 +115,10 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	Terrain terrain;
+	Terrain terrain(200.0f, 0.5f);
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
+	terrain.scale(0.1f);
 	loadedModel plane("assets/model/ask21mi.obj");
 
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
@@ -129,9 +130,6 @@ int main() {
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 																	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
-	
-
-
 
 	float lightX = 0;
 	
@@ -167,8 +165,6 @@ int main() {
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
-
-
 		plane.Draw(shader);
 
 		terrainShader.use();

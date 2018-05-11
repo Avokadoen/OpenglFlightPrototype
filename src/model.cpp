@@ -2,6 +2,7 @@
 
 Model::Model()
 {
+	transform = glm::mat4(1.0f);
 }
 
 void Model::Draw(Shader shader)

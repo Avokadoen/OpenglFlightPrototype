@@ -132,22 +132,23 @@ void Terrain::freeImageData() {
 	stbi_image_free(imageData);
 }
 
-void Terrain::createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor) {
+void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::vec3 primaryColor) {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	for (int i = 0; i < imageHeight; i++) {
-		for (int j = 0; j < imageWidth; j++) {
+	for (int y = 0; y < imageHeight; y++) {
+		for (int x = 0; x < imageWidth; x++) {
 
-			glm::vec3 data(0);
-			data.x = j * blockScale;
-			data.y = maxHeight * heightValues[(i*j)+j];
-			data.z = i * blockScale;
+			glm::vec3 data(0.0f);
+			data.x = x * blockScale;
+			data.y = maxHeight * heightValues[(imageWidth*y)+x];
+			
+			data.z = y * blockScale;
 
 			Vertex vboData;
-			vboData.Position = data;
-			vboData.Normal = glm::vec3(0);
-			vboData.TexCoords = glm::vec2(0);
+			vboData.Position	= data;
+			vboData.Normal		= glm::vec3(0.0f);
+			vboData.TexCoords	= glm::vec2(0.0f);
 
 			vertices.push_back(vboData);
 		}
@@ -177,19 +178,19 @@ std::vector<unsigned int> Terrain::generateIndices() {
 	indices.resize(numTriangles * 3);
 
 	unsigned int index = 0; // Index in the index buffer
-	for (unsigned int j = 0; j < (imageWidth - 1); ++j)
+	for (unsigned int y = 0; y < (imageHeight - 1); y++)
 	{
-		for (unsigned int i = 0; i < (imageHeight - 1); ++i)
+		for (unsigned int x = 0; x < (imageWidth - 1); x++)
 		{
-			int vertexIndex = (j * imageHeight) + i;
+			int vertexIndex = (y * imageHeight) + x;
 			// Top triangle (T0)
 			indices[index++] = vertexIndex;                           // V0
-			indices[index++] = vertexIndex + imageWidth + 1;		// V3
+			indices[index++] = vertexIndex + imageWidth;		// V3
 			indices[index++] = vertexIndex + 1;                      // V1
 																	// Bottom triangle (T1)
-			indices[index++] = vertexIndex;                           // V0
-			indices[index++] = vertexIndex + imageWidth;            // V2
-			indices[index++] = vertexIndex + imageWidth + 1;        // V3
+			indices[index++] = vertexIndex + 1;                           // V0
+			indices[index++] = vertexIndex + imageWidth + 1;            // V2
+			indices[index++] = vertexIndex + imageWidth;        // V3
 		}
 	}
 	return indices;
