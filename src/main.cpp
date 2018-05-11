@@ -115,9 +115,9 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	Model model("assets/models/old\ man/muro.obj");
-	Model model2("assets/models/nano/nanosuit.obj");
-	Model city("assets/models/box.obj");
+
+	Model model("assets/model/ask21mi.obj");
+
 	Shader shader("shaders/testvertex.vert", "shaders/testfragment.frag");
 	
 	float lastFrame = 0;
@@ -129,8 +129,8 @@ int main() {
 																	// view/projection transformations
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 	
-	city.scale(0.1f);
-	city.translate(glm::vec3(-150, -1050, 500));
+
+
 
 	float lightX = 0;
 	
@@ -167,14 +167,9 @@ int main() {
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
-		//model.translate(glm::vec3(-20 * deltaTime, 0, 0));
-		//model.rotate(40 * deltaTime, glm::vec3(0, 1, 0));
-		shader.setMat4("model", model.getTransform());
-		model.Draw(shader);
-		shader.setMat4("model", model2.getTransform());
-		model2.Draw(shader);
-		shader.setMat4("model", city.getTransform());
-		city.Draw(shader);
+		//;
+		//model.Draw(shader);
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
