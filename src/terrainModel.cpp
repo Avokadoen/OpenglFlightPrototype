@@ -25,7 +25,6 @@ bool Terrain::generateHeightValues() {
 				heightValues.push_back(GetHeightValue(imageData + (x + (imageWidth * y)) * nrComponents));
 			}
 		}
-
 		return true;
 	}
 	else {
@@ -80,28 +79,7 @@ bool Terrain::loadHeightMapData(const char *path)
 	imageData = stbi_load(path, &imageWidth, &imageHeight, &nrComponents, 0);
 
 
-	if (imageData)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 2)
-			format = GL_RG;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, imageWidth, imageHeight, 0, format, GL_UNSIGNED_BYTE, imageData);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-	else
+	if(!imageData)
 	{
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(imageData);
@@ -109,6 +87,7 @@ bool Terrain::loadHeightMapData(const char *path)
 	}
 	if (!generateHeightValues()) {
 		std::cout << "failed to generate height map" << std::endl;
+		return false;
 	}
 	//imageData = data;
 	return true;

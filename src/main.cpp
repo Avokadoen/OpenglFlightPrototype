@@ -124,7 +124,7 @@ int main() {
 	glfwSwapInterval(1);
 
 	Terrain terrain(70.0f, 0.5f);
-	terrain.loadHeightMapData("assets/heightmap/height100.png");
+	terrain.loadHeightMapData("assets/heightmap/height20.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	//terrain.scale(0.1f);
 	loadedModel plane("assets/model/ask21mi.obj");
