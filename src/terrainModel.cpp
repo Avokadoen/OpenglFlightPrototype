@@ -142,7 +142,6 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 			glm::vec3 data(0.0f);
 			data.x = x * blockScale;
 			data.y = maxHeight * heightValues[(imageWidth*y)+x];
-			
 			data.z = y * blockScale;
 
 			Vertex vboData;
@@ -175,22 +174,22 @@ std::vector<unsigned int> Terrain::generateIndices() {
 
 	// 3 indices for each triangle in the terrain mesh
 	std::vector<unsigned int> indices;
-	indices.resize(numTriangles * 3);
+	//indices.resize(numTriangles * 3);
 
 	unsigned int index = 0; // Index in the index buffer
 	for (unsigned int y = 0; y < (imageHeight - 1); y++)
 	{
 		for (unsigned int x = 0; x < (imageWidth - 1); x++)
 		{
-			int vertexIndex = (y * imageHeight) + x;
+			int vertexIndex = (y * imageWidth) + x;
 			// Top triangle (T0)
-			indices[index++] = vertexIndex;                           // V0
-			indices[index++] = vertexIndex + imageWidth;		// V3
-			indices[index++] = vertexIndex + 1;                      // V1
+			indices.push_back(vertexIndex);                           // V0
+			indices.push_back(vertexIndex + imageWidth);		// V3
+			indices.push_back(vertexIndex + 1);                      // V1
 																	// Bottom triangle (T1)
-			indices[index++] = vertexIndex + 1;                           // V0
-			indices[index++] = vertexIndex + imageWidth + 1;            // V2
-			indices[index++] = vertexIndex + imageWidth;        // V3
+			indices.push_back(vertexIndex + 1);                           // V0
+			indices.push_back(vertexIndex + imageWidth + 1);            // V2
+			indices.push_back(vertexIndex + imageWidth);        // V3
 		}
 	}
 	return indices;
