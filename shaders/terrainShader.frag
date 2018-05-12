@@ -32,6 +32,7 @@ uniform float maxHeight;
 uniform float yOffset;
 uniform float yScale;
 uniform float highestPoint;
+uniform float lerpRange;
 
 /*      LIGHT EMITTER DEFINITIONS       */
 struct DirLight {
@@ -97,6 +98,8 @@ uniform int specularCount;
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+Material applyLerpToMaterial(Material from, Material to, float lerpSum);
+float lerp(float v0, float v1, float t);
 
 /*		COLOR OUTPUT VARIABLES 		*/
 vec3 diffuseColor;
@@ -107,24 +110,46 @@ void main()
 {
 	// apply transform on height
 	float fragRelativeHeight = (FragPos.y/(maxHeight * yScale)) - yOffset;
-	fragRelativeHeight *= highestPoint;
-	if(fragRelativeHeight > snowBottom){
+
+	if(fragRelativeHeight < snowBottom + lerpRange && fragRelativeHeight > snowBottom - lerpRange){
+		float lerpStart = snowBottom + lerpRange;
+		float lerpEnd = snowBottom - lerpRange;
+		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
+		fragMaterial = applyLerpToMaterial(stone, snow, lerpSum);
+	}
+	else if(fragRelativeHeight > snowBottom){
 		fragMaterial = snow;
 	}
-	else if(fragRelativeHeight > stoneBottom && fragRelativeHeight < stoneTop){
+	else if(fragRelativeHeight < stoneBottom + lerpRange && fragRelativeHeight > stoneBottom - lerpRange){
+		float lerpStart = stoneBottom + lerpRange;
+		float lerpEnd = stoneBottom - lerpRange;
+		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
+		fragMaterial = applyLerpToMaterial(grass, stone, lerpSum);
+	}
+	else if(fragRelativeHeight > stoneBottom){
 		fragMaterial = stone;
 	}
-	else if(fragRelativeHeight > grassBottom && fragRelativeHeight < grassTop){
+	else if(fragRelativeHeight > grassBottom + lerpRange && fragRelativeHeight > grassBottom - lerpRange){
+		float lerpStart = grassBottom + lerpRange;
+		float lerpEnd = grassBottom - lerpRange;
+		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
+		fragMaterial = applyLerpToMaterial(mud, grass, lerpSum);
+	}
+	else if(fragRelativeHeight > grassBottom){
 		fragMaterial = grass;
 	}
-	else if(fragRelativeHeight > mudBottom && fragRelativeHeight < mudBottom){
+	else if(fragRelativeHeight < mudBottom + lerpRange && fragRelativeHeight > mudBottom - lerpRange){
+		float lerpStart = mudBottom + lerpRange;
+		float lerpEnd = mudBottom - lerpRange;
+		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
+		fragMaterial = applyLerpToMaterial(water, mud, lerpSum);
+	}
+	else if(fragRelativeHeight > mudBottom){
 		fragMaterial = mud;
 	}
 	else{
 		fragMaterial = water;
 	}
-
-
 
     diffuseColor += fragMaterial.diffuse;
     specularColor += fragMaterial.specular;
@@ -220,4 +245,17 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
     return (ambient + diffuse + specular);
+}
+
+Material applyLerpToMaterial(Material from, Material to, float lerpSum){
+	Material rtr;
+	rtr.ambient = from.ambient * lerpSum + to.ambient * (1 - lerpSum);
+	rtr.diffuse = from.diffuse * lerpSum + to.diffuse * (1 - lerpSum);
+	rtr.specular = from.specular * lerpSum + to.specular * (1 - lerpSum);
+	rtr.shininess = from.shininess * lerpSum + to.shininess * (1 - lerpSum);
+	return rtr;
+}
+
+float lerp(float v0, float v1, float t){
+	return (1 - t) * v0 + t * v1;
 }

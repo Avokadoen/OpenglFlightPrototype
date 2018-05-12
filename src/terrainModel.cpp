@@ -12,7 +12,7 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	yOffset = 0.0f;
 	highestPoint = 0;
 	yScale = 1.0f;
-	lerpRange = 0.05;
+	lerpRange = 0.05f;
 }
 
 bool Terrain::generateHeightValues() {
@@ -184,7 +184,7 @@ void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("yScale", yScale);
 	shader.setFloat("yOffset", yOffset);
 	shader.setFloat("highestPoint", highestPoint);
-	shader.setFloat("lerpRange", lerpRange); 
+	shader.setFloat("lerpRange", lerpRange * yScale); 
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
