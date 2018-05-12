@@ -9,23 +9,29 @@ struct Material {
   float shininess;
 };
 uniform Material snow;
+uniform float snowTop;
 uniform float snowBottom;
 
 uniform Material stone;
+uniform float stoneTop;
 uniform float stoneBottom;
 
 uniform Material grass;
+uniform float grassTop;
 uniform float grassBottom;
 
 uniform Material mud;
+uniform float mudTop;
 uniform float mudBottom;
 
 uniform Material water;
+uniform float waterTop;
 uniform float waterBottom;
 
 uniform float maxHeight;
 uniform float yOffset;
-
+uniform float yScale;
+uniform float highestPoint;
 
 /*      LIGHT EMITTER DEFINITIONS       */
 struct DirLight {
@@ -99,8 +105,26 @@ Material fragMaterial;
 
 void main()
 {
+	// apply transform on height
+	float fragRelativeHeight = (FragPos.y/(maxHeight * yScale)) - yOffset;
+	fragRelativeHeight *= highestPoint;
+	if(fragRelativeHeight > snowBottom){
+		fragMaterial = snow;
+	}
+	else if(fragRelativeHeight > stoneBottom && fragRelativeHeight < stoneTop){
+		fragMaterial = stone;
+	}
+	else if(fragRelativeHeight > grassBottom && fragRelativeHeight < grassTop){
+		fragMaterial = grass;
+	}
+	else if(fragRelativeHeight > mudBottom && fragRelativeHeight < mudBottom){
+		fragMaterial = mud;
+	}
+	else{
+		fragMaterial = water;
+	}
 
-	fragMaterial = snow;
+
 
     diffuseColor += fragMaterial.diffuse;
     specularColor += fragMaterial.specular;
