@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-
+#include <algorithm>
 
 
 
@@ -10,6 +10,7 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight = maxHeight;
 	this->blockScale = blockScale;
 	yOffset = 0.0f;
+	highestPoint = 0;
 	yScale = 1.0f;
 }
 
@@ -90,6 +91,12 @@ bool Terrain::loadHeightMapData(const char *path)
 		return false;
 	}
 	//imageData = data;
+	for (auto point : heightValues) {
+		if (highestPoint < point) {
+			highestPoint = point;
+		}
+	}
+	
 	return true;
 }
 
@@ -98,18 +105,15 @@ void Terrain::freeImageData() {
 }
 
 void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::vec3 primaryColor) {
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
+	
+	auto iter = heightValues.begin();
 	for (int y = 0; y < imageHeight; y++) {
 		for (int x = 0; x < imageWidth; x++) {
 
 			glm::vec3 data(0.0f);
 			data.x = x * blockScale;
-			data.y = maxHeight * heightValues[(imageWidth*y)+x];
+			data.y = maxHeight * (*iter++);
 			data.z = y * blockScale;
-
-			if (heightValues[(imageWidth*y) + x] > 0.5 || heightValues[(imageWidth*y) + x] < 0.05) std::cout << heightValues[(imageWidth*y) + x] << " ";
 
 			Vertex vboData;
 			vboData.Position	= data;
@@ -119,28 +123,24 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 			vertices.push_back(vboData);
 		}
 	}
-	indices = generateIndices();
-	std::vector<glm::vec3> normals = generateNormals(vertices, indices);
-
-	for (int i = 0; i < vertices.size(); i += 3) {
-		vertices[indices[i]].Normal = normals[i];
-		vertices[indices[i + 1]].Normal = normals[i];
-		vertices[indices[i + 2]].Normal = normals[i];
+	generateIndices();
+	for (int i = 0; i < 6; i++) {
+		generateNormals(i);
+	}
+	for (auto&& vertex : vertices) {
+		glm::normalize(vertex.Normal);
 	}
 
 	Mesh mesh(vertices, indices);
 	meshes.push_back(mesh);
 }
 
-std::vector<unsigned int> Terrain::generateIndices() {
+void Terrain::generateIndices() {
 	
-
 	// 2 triangles for every quad of the terrain mesh
 	const unsigned int numTriangles = (imageWidth - 1) * (imageHeight - 1) * 2;
 
 	// 3 indices for each triangle in the terrain mesh
-	std::vector<unsigned int> indices;
-	//indices.resize(numTriangles * 3);
 
 	unsigned int index = 0; // Index in the index buffer
 	for (unsigned int y = 0; y < (imageHeight - 1); y++)
@@ -158,70 +158,67 @@ std::vector<unsigned int> Terrain::generateIndices() {
 			indices.push_back(vertexIndex + imageWidth);        // V3
 		}
 	}
-	return indices;
+
 }
 
-std::vector<glm::vec3>	Terrain::generateNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
+void Terrain::generateNormals(int offset) {
 	std::vector<glm::vec3> normals;
 	normals.resize(vertices.size());
-	for (unsigned int i = 0; i < vertices.size(); i += 3)
+	for (unsigned int i = 0 + offset; i < vertices.size() - 3; i += 3)
 	{
 		glm::vec3 v0 = vertices[indices[i + 0]].Position;
 		glm::vec3 v1 = vertices[indices[i + 1]].Position;
 		glm::vec3 v2 = vertices[indices[i + 2]].Position;
 
-		glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+		glm::vec3 normal = glm::cross(v2 - v0, v1 - v0);
 
-		normals[indices[i + 0]] += normal;
-		normals[indices[i + 1]] += normal;
-		normals[indices[i + 2]] += normal;
+		vertices[indices[i + 0]].Normal += normal;
+		vertices[indices[i + 1]].Normal += normal;
+		vertices[indices[i + 2]].Normal += normal;
 	}
-
-	for(auto&& normal : normals){
-		normal = glm::normalize(normal);
-	}
-
-	return normals;
 }
 
 void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("maxHeight", maxHeight);
 	shader.setFloat("yScale", yScale);
 	shader.setFloat("yOffset", yOffset);
+	shader.setFloat("highestPoint", highestPoint);
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
 	shader.setVec3("snow.specular", snow.specular);
 	shader.setFloat("snow.shininess", snow.shininess);
-	shader.setFloat("snowBottom", SnowBottom);
-	shader.setFloat("snowTop", SnowTop);
+	shader.setFloat("snowTop", SnowTop * highestPoint);
+	shader.setFloat("snowBottom", SnowBottom * highestPoint);
+	
 
 	shader.setVec3("stone.ambient", stone.ambient);
 	shader.setVec3("stone.diffuse", stone.diffuse);
 	shader.setVec3("stone.specular", stone.specular);
 	shader.setFloat("stone.shininess", stone.shininess);
-	shader.setFloat("stoneBottom", StoneBottom);
-	shader.setFloat("stoneTop", StoneTop);
+	shader.setFloat("stoneTop", StoneTop * highestPoint);
+	shader.setFloat("stoneBottom", StoneBottom * highestPoint);
+
 
 	shader.setVec3("grass.ambient", grass.ambient);
 	shader.setVec3("grass.diffuse", grass.diffuse);
 	shader.setVec3("grass.specular", grass.specular);
 	shader.setFloat("grass.shininess", grass.shininess);
-	shader.setFloat("grassBottom", GrassBottom);
-	shader.setFloat("grassTop", GrassTop);
+	shader.setFloat("grassTop", GrassTop * highestPoint);
+	shader.setFloat("grassBottom", GrassBottom * highestPoint);
 
 	shader.setVec3("mud.ambient", mud.ambient);
 	shader.setVec3("mud.diffuse", mud.diffuse);
 	shader.setVec3("mud.specular", mud.specular);
 	shader.setFloat("mud.shininess", mud.shininess);
-	shader.setFloat("mudBottom", MudBottom);
-	shader.setFloat("mudTop", MudTop);
+	shader.setFloat("mudTop", MudTop * highestPoint);
+	shader.setFloat("mudBottom", MudBottom * highestPoint);
 
 	shader.setVec3("water.ambient", water.ambient);
 	shader.setVec3("water.diffuse", water.diffuse);
 	shader.setVec3("water.specular", water.specular);
 	shader.setFloat("water.shininess", water.shininess);
-	shader.setFloat("waterTop", WaterTop);
+	shader.setFloat("waterTop", WaterTop * highestPoint);
 
 }
 

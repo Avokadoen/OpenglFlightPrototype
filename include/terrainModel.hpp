@@ -31,12 +31,12 @@ public:
 protected:
 
 	const Material snow = {
-		glm::vec3(0.6, 0.6, 0.67),
-		glm::vec3(0.9, 0.9, 1.0),
+		glm::vec3(0.7, 0.7, 0.7),
+		glm::vec3(1.0, 1.0, 1.0),
 		glm::vec3(0.5, 0.5, 0.5),
 		32.0f
 	};
-	const float SnowBottom = 0.85f;
+	const float SnowBottom = 0.80f;
 	const float SnowTop = 1.0f;
 
 	const Material stone = {
@@ -55,7 +55,7 @@ protected:
 		16.0f
 	};
 	const float GrassBottom = 0.1f;
-	const float GrassTop = 0.5f;
+	const float GrassTop = 0.45f;
 
 
 	const Material mud = {
@@ -65,7 +65,7 @@ protected:
 		8.0f
 	};
 	const float MudBottom = 0.05f;
-	const float MudTop = 0.1f;
+	const float MudTop = 0.2f;
 
 	const Material water = {
 		glm::vec3(0.1, 0.1, 0.3),
@@ -76,10 +76,14 @@ protected:
 	const float WaterTop = 0.05f;
 
 private:
-	std::vector<unsigned int> generateIndices();
-	std::vector<glm::vec3>	generateNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	void generateIndices();
+	void generateNormals(int offset);
 	std::vector<float>	heightValues;
 
+	std::vector<unsigned int> indices;
+	std::vector<Vertex> vertices;
+
+	float highestPoint;
 	float yOffset;
 	float yScale;
 	float maxHeight;

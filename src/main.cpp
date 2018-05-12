@@ -16,7 +16,7 @@ void testLight(Shader& shader) {
 
 	shader.setInt("spotCount", 1);
 	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.setVec3("spotLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+	shader.setVec3("spotLight[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
 	shader.setVec3("spotLight[0].specular", glm::vec3(0.6f, 0.6f, 0.6f));
 	shader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(16.0f)));
 	shader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
@@ -56,8 +56,8 @@ const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
+float lastX		= SCR_WIDTH / 2.0f;
+float lastY		= SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 // timing
@@ -81,7 +81,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "framework", nullptr, nullptr); // glfwGetPrimaryMonitor()
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Exam", nullptr, nullptr); // glfwGetPrimaryMonitor()
 	if (!window)
 	{
 		// Window or OpenGL context creation failed
@@ -124,7 +124,7 @@ int main() {
 	glfwSwapInterval(1);
 
 	Terrain terrain(70.0f, 0.5f);
-	terrain.loadHeightMapData("assets/heightmap/height20.png");
+	terrain.loadHeightMapData("assets/heightmap/height50.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	//terrain.scale(0.1f);
 	loadedModel plane("assets/model/ask21mi.obj");
@@ -136,8 +136,7 @@ int main() {
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-																	// view/projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+
 
 	float lightX = 0;
 
@@ -162,7 +161,8 @@ int main() {
 		testLight(shader);
 		shader.setVec3("spotLight[0].position", camera.Position);
 		shader.setVec3("spotLight[0].direction", camera.Front);
-	
+		// view/projection transformations
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);

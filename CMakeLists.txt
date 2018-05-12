@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
-project(framework_OpenGL LANGUAGES CXX)
+project(AkselhjExam_2531 LANGUAGES CXX)
 
 file( GLOB SOURCES src/*.cpp include/*.hpp include/*.h)
-add_executable(framework_OpenGL
+add_executable(AkselhjExam_2531
 ${PROJECT_SOURCE_DIR}/src ${SOURCES})
 
-set_target_properties(framework_OpenGL
+set_target_properties(AkselhjExam_2531
     PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
@@ -17,7 +17,7 @@ find_package(OpenGL REQUIRED)
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL "turn off build examples" FORCE)
 set( GLFW_BUILD_TESTS OFF CACHE BOOL "turn off tests" FORCE)
 
-target_include_directories(framework_OpenGL
+target_include_directories(AkselhjExam_2531
   PRIVATE ${PROJECT_SOURCE_DIR}/include
   PRIVATE ${PROJECT_SOURCE_DIR}/glew-2.1.0/include
   PRIVATE ${PROJECT_SOURCE_DIR}/freetype-2.9/include
@@ -39,7 +39,7 @@ file(COPY ${PROJECT_SOURCE_DIR}/shaders/ DESTINATION ${PROJECT_SOURCE_DIR}/build
 file(COPY ${PROJECT_SOURCE_DIR}/assets/ DESTINATION ${PROJECT_SOURCE_DIR}/build/assets/)
 find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib32)
 
-target_link_libraries(framework_OpenGL
+target_link_libraries(AkselhjExam_2531
   PRIVATE ${OPENGL_LIBRARIES}
   PRIVATE ${GLEW_LIBRARIES}
   PRIVATE glfw ${GLFW_LIBRARIES}
