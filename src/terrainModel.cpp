@@ -262,3 +262,13 @@ void Terrain::goTowardsSummerSeason() {
 void Terrain::goTowardsWinterSeason() {
 	seasonDirection = 1;
 }
+
+glm::vec3 Terrain::getActualPos() {
+	auto middle = vertices.begin() + ((imageHeight / 2) * imageWidth) + (imageWidth / 2);
+	return middle->Position;
+}
+
+float Terrain::getWidth() {
+	auto withVertex = vertices.begin() + imageWidth -1;
+	return withVertex->Position.x;
+}

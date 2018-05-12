@@ -130,8 +130,7 @@ int main() {
 	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
-	LoadedModel plane("assets/model/ask21mi.obj");
-
+	Sun plane(0, "assets/model/ask21mi.obj");
 
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
@@ -141,12 +140,16 @@ int main() {
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-
+	plane.translate(terrain.getActualPos());
+	plane.setOrbitTarget(terrain.getActualPos());
+	plane.translate(glm::vec3(terrain.getWidth(), 0, 0));
+	plane.scale(40.0f);
 	float lightX = 0;
 
 	terrainShader.use();
 	terrain.bindMaterialsToShader(terrainShader);
 
+	terrain.getActualPos();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -167,14 +170,13 @@ int main() {
 		shader.setVec3("spotLight[0].position", camera.Position);
 		shader.setVec3("spotLight[0].direction", camera.Front);
 		// view/projection transformations
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
+		plane.update(deltaTime);
 		plane.Draw(shader);
-
-		//theSun.update(deltaTime);
 		terrainShader.use();
 
 		testLight(terrainShader);

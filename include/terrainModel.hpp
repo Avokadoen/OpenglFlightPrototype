@@ -28,8 +28,11 @@ public:
 	void goTowardsSummerSeason();
 	void goTowardsWinterSeason();
 	void toggleContourStroke();
+
+	glm::vec3 getActualPos();
+	float getWidth();
 protected:
-	const int SecondsForAYear = 10;
+	const int SecondsForAYear = 60;
 	const float contourStroke = 0.002f;
 
 	const Material snow = {

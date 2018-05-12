@@ -5,16 +5,20 @@
 class Sun : public LoadedModel{
 public:
 	Sun(int pointLightIndex, char* path) ;
-	void update(double deltaTime);
-	void updateShader(Shader shader);
-
+	virtual void translate(glm::vec3 offset);
+	void update(float deltaTime);
+	glm::vec3 getPosition();
+	void setOrbitTarget(glm::vec3 target);
+	void setVelocity(float velocity);
 private:
+	float velocity;
 	glm::vec3 position;
-	glm::vec3 ambient;
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-	int pointLightIndex;
-	float dayAsSeconds;
+	glm::vec3 orbitPosition;
+	//glm::vec3 ambient;
+	//glm::vec3 diffuse;
+	//glm::vec3 specular;
+	//int pointLightIndex;
+	//float dayAsSeconds;
 
-	static int sunCount;
+	//static int sunCount;
 };
