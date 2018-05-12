@@ -13,6 +13,11 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	highestPoint = 0;
 	yScale = 1.0f;
 	lerpRange = 0.05f;
+	seasonModifier = 0.0f;
+}
+
+void Terrain::update(float deltaTime) {
+	seasonModifier += deltaTime / (float)SecondsForAYear;
 }
 
 bool Terrain::generateHeightValues() {
@@ -184,32 +189,35 @@ void Terrain::generateNormals(int offset) {
 
 void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("maxHeight", maxHeight);
+	shader.setFloat("seasonModifier", seasonModifier);
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
 	shader.setVec3("snow.specular", snow.specular);
 	shader.setFloat("snow.shininess", snow.shininess);
-	shader.setFloat("snowBottom", SnowBottom );
-	
+	shader.setFloat("SummerSnowBottom", SummerSnowBottom );
+	shader.setFloat("WinterSnowBottom", WinterSnowBottom);
 
 	shader.setVec3("stone.ambient", stone.ambient);
 	shader.setVec3("stone.diffuse", stone.diffuse);
 	shader.setVec3("stone.specular", stone.specular);
 	shader.setFloat("stone.shininess", stone.shininess);
-	shader.setFloat("stoneBottom", StoneBottom);
-
+	shader.setFloat("SummerStoneBottom", SummerStoneBottom);
+	shader.setFloat("WinterStoneBottom", WinterStoneBottom);
 
 	shader.setVec3("grass.ambient", grass.ambient);
 	shader.setVec3("grass.diffuse", grass.diffuse);
 	shader.setVec3("grass.specular", grass.specular);
 	shader.setFloat("grass.shininess", grass.shininess);
-	shader.setFloat("grassBottom", GrassBottom );
+	shader.setFloat("SummerGrassBottom", SummerGrassBottom);
+	shader.setFloat("WinterGrassBottom", WinterGrassBottom);
 
 	shader.setVec3("mud.ambient", mud.ambient);
 	shader.setVec3("mud.diffuse", mud.diffuse);
 	shader.setVec3("mud.specular", mud.specular);
 	shader.setFloat("mud.shininess", mud.shininess);
-	shader.setFloat("mudBottom", MudBottom );
+	shader.setFloat("SummerMudBottom", SummerMudBottom);
+	shader.setFloat("WinterMudBottom", WinterMudBottom);
 
 	shader.setVec3("water.ambient", water.ambient);
 	shader.setVec3("water.diffuse", water.diffuse);
@@ -218,22 +226,6 @@ void Terrain::bindMaterialsToShader(Shader shader) {
 
 }
 
-void Terrain::scale(glm::vec3 scale) {
-	Model::scale(scale);
-
-	// save scale for color placement in shader
-	yScale = scale.y;
-}
-
-void Terrain::scale(float scale) {
-	Model::scale(scale);
-
-	// save scale for color placement in shader
-	yScale = scale;
-}
-
-void Terrain::translate(glm::vec3 offset) {
-	Model::translate(offset);
-
-	yOffset = offset.y;
+void Terrain::setSeason(float seasonValue) {
+	seasonModifier = seasonValue;
 }

@@ -1,7 +1,12 @@
 #version 330 core
 
 out vec4 FragColor;
-
+struct Material {
+  vec3 ambient;
+  vec3 diffuse;
+  vec3 specular;
+  float shininess;
+};
 struct Material {
   vec3 ambient;
   vec3 diffuse;
@@ -9,30 +14,26 @@ struct Material {
   float shininess;
 };
 uniform Material snow;
-uniform float snowTop;
-uniform float snowBottom;
+uniform float SummerSnowBottom;
+uniform float WinterSnowBottom;
 
 uniform Material stone;
-uniform float stoneTop;
-uniform float stoneBottom;
+uniform float SummerStoneBottom;
+uniform float WinterStoneBottom;
 
 uniform Material grass;
-uniform float grassTop;
-uniform float grassBottom;
+uniform float SummerGrassBottom;
+uniform float WinterGrassBottom;
 
 uniform Material mud;
-uniform float mudTop;
-uniform float mudBottom;
+uniform float SummerMudBottom;
+uniform float WinterMudBottom;
 
 uniform Material water;
-uniform float waterTop;
 uniform float waterBottom;
 
 uniform float maxHeight;
-//uniform float yOffset;
-//uniform float yScale;
-//uniform float highestPoint;
-//uniform float lerpRange;
+uniform float seasonModifier;
 
 /*      LIGHT EMITTER DEFINITIONS       */
 struct DirLight {
@@ -101,39 +102,28 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 Material applyLerpToMaterial(Material from, Material to, float lerpSum);
 float lerp(float v0, float v1, float t);
 
-/*		COLOR OUTPUT VARIABLES 		*/
+
+/*      VARIABLES DECLARATIONS       */
 vec3 diffuseColor;
 vec3 specularColor;
 Material fragMaterial;
 
 void main()
 {
-	float lerpRange = 0.05f;
+	float lerpRange = 0.02;
 	float fragRelativeHeight = FragPos.y/maxHeight;
 
+	float snowBottom = lerp(SummerSnowBottom, WinterSnowBottom, seasonModifier);
+	float stoneBottom = lerp(SummerStoneBottom, WinterStoneBottom, seasonModifier);
+	float grassBottom = lerp(SummerGrassBottom, WinterGrassBottom, seasonModifier);
+	float mudBottom = lerp(SummerMudBottom, WinterMudBottom, seasonModifier);
 
 	if(fragRelativeHeight > snowBottom){
 		fragMaterial = snow;
 
 		if(fragRelativeHeight < snowBottom + lerpRange){
 			float lerpPos = ((fragRelativeHeight - snowBottom) / lerpRange);
-			fragMaterial = applyLerpToMaterial(stone, snow, lerpPos);
-		}
-	}
-	else if(fragRelativeHeight > stoneBottom){
-		fragMaterial = stone;
-
-		if(fragRelativeHeight < stoneBottom + lerpRange){
-			float lerpPos = ((fragRelativeHeight - stoneBottom) / lerpRange);
-			fragMaterial = applyLerpToMaterial(grass, stone, lerpPos);
-		}
-	}
-	else if(fragRelativeHeight > grassBottom){
-		fragMaterial = grass;
-
-		if(fragRelativeHeight < grassBottom + lerpRange){
-			float lerpPos = ((fragRelativeHeight - grassBottom) / lerpRange);
-			fragMaterial = applyLerpToMaterial(mud, grass, lerpPos);
+			fragMaterial = applyLerpToMaterial(mud, snow, lerpPos);
 		}
 	}
 	else if(fragRelativeHeight > mudBottom){
@@ -141,15 +131,24 @@ void main()
 
 		if(fragRelativeHeight < mudBottom + lerpRange){
 			float lerpPos = ((fragRelativeHeight - mudBottom) / lerpRange);
-			fragMaterial = applyLerpToMaterial(water, mud, lerpPos);
+			fragMaterial = applyLerpToMaterial(grass, mud, lerpPos);
+		}
+	}
+	else if(fragRelativeHeight > grassBottom){
+		fragMaterial = grass;
+
+		if(fragRelativeHeight < grassBottom + lerpRange){
+			float lerpPos = ((fragRelativeHeight - grassBottom) / lerpRange);
+			fragMaterial = applyLerpToMaterial(water, grass, lerpPos);
 		}
 	}
 	else{
 		fragMaterial = water;
 	}
 
-    diffuseColor = fragMaterial.diffuse;
-    specularColor = fragMaterial.specular;
+    diffuseColor += fragMaterial.diffuse;
+    specularColor += fragMaterial.specular;
+
 
     // properties
     vec3 norm = normalize(Normal);

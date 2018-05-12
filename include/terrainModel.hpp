@@ -9,7 +9,7 @@ class Terrain : public Model
 public:
 
 	Terrain(float maxHeight = 500.0f, float blockScale = 2.0f);
-
+	void update(float deltaTime);
 	int nrComponents;
 	int imageWidth;
 	int imageHeight;
@@ -23,21 +23,19 @@ public:
 	bool generateHeightValues();
 	void createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor);
 	void bindMaterialsToShader(Shader shader);
-
-	virtual void translate(glm::vec3 offset);
-	virtual void scale(glm::vec3 scale);
-	virtual void scale(float scale);
+	void setSeason(float seasonValue);
 
 protected:
+	const int SecondsForAYear = 200;
 
 	const Material snow = {
 		glm::vec3(0.7, 0.7, 0.7),
 		glm::vec3(1.0, 1.0, 1.0),
-		glm::vec3(0.5, 0.5, 0.5),
+		glm::vec3(0.8, 0.8, 0.8),
 		32.0f
 	};
-	const float SnowBottom = 0.40f;
-	const float SnowTop = 1.0f;
+	const float SummerSnowBottom = 0.50f;
+	const float WinterSnowBottom = 0.1f;
 
 	const Material stone = {
 		glm::vec3(0.2, 0.2, 0.2),
@@ -45,19 +43,8 @@ protected:
 		glm::vec3(0.05, 0.05, 0.05),
 		16.0f
 	};
-	const float StoneBottom = 0.30f;
-	const float StoneTop = 0.80f;
-
-	const Material grass = {
-		glm::vec3(0.1, 0.3, 0.1),
-		glm::vec3(0.2, 0.6, 0.2),
-		glm::vec3(0.05, 0.05, 0.05),
-		16.0f
-	};
-	const float GrassTop = 0.0f;
-	const float GrassBottom = 0.2f;
-
-
+	const float SummerStoneBottom = 2.0f;
+	const float WinterStoneBottom = 2.0f;
 
 	const Material mud = {
 		glm::vec3(0.4, 0.2, 0.05),
@@ -65,17 +52,30 @@ protected:
 		glm::vec3(0.2, 0.2, 0.2),
 		8.0f
 	};
-	const float MudBottom = 0.08f;
-	const float MudTop = 0.2f;
+	const float SummerMudBottom = 0.4f;
+	const float WinterMudBottom = 0.9;
+
+	const Material grass = {
+		glm::vec3(0.1, 0.3, 0.1),
+		glm::vec3(0.2, 0.6, 0.2),
+		glm::vec3(0.05, 0.05, 0.05),
+		16.0f
+	};
+	const float SummerGrassBottom = 0.15f;
+	const float WinterGrassBottom = 0.08f;
+
 
 	const Material water = {
 		glm::vec3(0.1, 0.1, 0.3),
 		glm::vec3(0.2, 0.2, 0.6),
-		glm::vec3(0.5, 0.5, 0.5),
+		glm::vec3(0.9, 0.9, 0.9),
 		64.0f
 	};
-	const float WaterTop = 0.1f;
+	const float SummerWaterBottom = 0.00f;
+	const float WinterWaterBottom = 0.00f;
 
+
+	
 private:
 	void generateIndices();
 	void generateNormals(int offset);
@@ -90,6 +90,5 @@ private:
 	float maxHeight;
 	float blockScale;
 	float lerpRange;
-	unsigned int heightoffset;
-
+	float seasonModifier;
 };

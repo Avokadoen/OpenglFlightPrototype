@@ -182,6 +182,8 @@ int main() {
 		terrainShader.setVec3("lightPos", camera.Position);
 		
 		terrain.Draw(terrainShader);
+		terrain.update(deltaTime);
+		terrain.bindMaterialsToShader(terrainShader);
 		
 
 		glfwSwapBuffers(window);
