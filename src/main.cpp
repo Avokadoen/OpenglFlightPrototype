@@ -5,14 +5,15 @@
 #include "camera.hpp"
 #include "loadedModel.hpp"
 #include "terrainModel.hpp"
+#include "sun.hpp"
 
 void testLight(Shader& shader) {
 
-	/*shader.setBool("dirSet", true);
+	shader.setBool("dirSet", true);
 	shader.setVec3("dirLight.direction", glm::vec3(1.0f, -1.0f, -0.3f));
 	shader.setVec3("dirLight.ambient", glm::vec3(0.1f, 0.05f, 0.05f));
 	shader.setVec3("dirLight.diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));*/
+	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
 	shader.setInt("spotCount", 1);
 	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -123,11 +124,11 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	Terrain terrain(70.0f, 0.5f);
-	terrain.loadHeightMapData("assets/heightmap/height50.png");
+	Terrain terrain(70.0f, 2.0f);
+	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
-	//terrain.scale(0.1f);
-	loadedModel plane("assets/model/ask21mi.obj");
+	LoadedModel plane("assets/model/ask21mi.obj");
+
 
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
@@ -166,8 +167,10 @@ int main() {
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
+
 		plane.Draw(shader);
 
+		//theSun.update(deltaTime);
 		terrainShader.use();
 
 		testLight(terrainShader);
@@ -179,6 +182,7 @@ int main() {
 		terrainShader.setVec3("lightPos", camera.Position);
 		
 		terrain.Draw(terrainShader);
+		
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

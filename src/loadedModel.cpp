@@ -1,4 +1,4 @@
-#include "loadedModel.hpp"
+#include "LoadedModel.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -8,7 +8,11 @@
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
-loadedModel::loadedModel(char *path) : Model()
+LoadedModel::LoadedModel() {
+
+}
+
+LoadedModel::LoadedModel(char *path) : Model()
 {
 	loadModel(path);
 }
@@ -17,7 +21,7 @@ loadedModel::loadedModel(char *path) : Model()
 
 /* PRIVATE FUNCTIONS */
 
-void loadedModel::loadModel(std::string path)
+void LoadedModel::loadModel(std::string path)
 {
 	transform = glm::mat4(1.0f);
 
@@ -37,7 +41,7 @@ void loadedModel::loadModel(std::string path)
 
 
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-void loadedModel::processNode(aiNode *node, const aiScene *scene)
+void LoadedModel::processNode(aiNode *node, const aiScene *scene)
 {
 	// process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -54,7 +58,7 @@ void loadedModel::processNode(aiNode *node, const aiScene *scene)
 	}
 
 }
-Mesh loadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
+Mesh LoadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 {
 	// data to fill
 	std::vector<Vertex> vertices;
@@ -133,7 +137,7 @@ Mesh loadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-std::vector<Texture> loadedModel::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture> LoadedModel::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

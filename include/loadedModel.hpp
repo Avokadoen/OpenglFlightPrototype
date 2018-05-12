@@ -14,12 +14,12 @@
 
 
 
-class loadedModel : public Model
+class LoadedModel : public Model
 {
 public:
 	/*  Functions   */
-	loadedModel(char *path);
-
+	LoadedModel(char *path);
+	LoadedModel();
 private:
 	std::vector<Texture> textures_loaded;
 

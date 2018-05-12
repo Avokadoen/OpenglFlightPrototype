@@ -29,10 +29,10 @@ uniform float waterTop;
 uniform float waterBottom;
 
 uniform float maxHeight;
-uniform float yOffset;
-uniform float yScale;
-uniform float highestPoint;
-uniform float lerpRange;
+//uniform float yOffset;
+//uniform float yScale;
+//uniform float highestPoint;
+//uniform float lerpRange;
 
 /*      LIGHT EMITTER DEFINITIONS       */
 struct DirLight {
@@ -108,52 +108,48 @@ Material fragMaterial;
 
 void main()
 {
-	// apply transform on height
-	float fragRelativeHeight = (FragPos.y/(maxHeight * yScale)) - yOffset;
+	float lerpRange = 0.05f;
+	float fragRelativeHeight = FragPos.y/maxHeight;
 
-	if(fragRelativeHeight < snowBottom + lerpRange && fragRelativeHeight > snowBottom - lerpRange){
-		float lerpStart = snowBottom + lerpRange;
-		float lerpEnd = snowBottom - lerpRange;
-		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
-		fragMaterial = applyLerpToMaterial(stone, snow, lerpSum);
-	}
-	else if(fragRelativeHeight > snowBottom){
+
+	if(fragRelativeHeight > snowBottom){
 		fragMaterial = snow;
-	}
-	else if(fragRelativeHeight < stoneBottom + lerpRange && fragRelativeHeight > stoneBottom - lerpRange){
-		float lerpStart = stoneBottom + lerpRange;
-		float lerpEnd = stoneBottom - lerpRange;
-		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
-		fragMaterial = applyLerpToMaterial(grass, stone, lerpSum);
+
+		if(fragRelativeHeight < snowBottom + lerpRange){
+			float lerpPos = ((fragRelativeHeight - snowBottom) / lerpRange);
+			fragMaterial = applyLerpToMaterial(stone, snow, lerpPos);
+		}
 	}
 	else if(fragRelativeHeight > stoneBottom){
 		fragMaterial = stone;
-	}
-	else if(fragRelativeHeight > grassBottom + lerpRange && fragRelativeHeight > grassBottom - lerpRange){
-		float lerpStart = grassBottom + lerpRange;
-		float lerpEnd = grassBottom - lerpRange;
-		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
-		fragMaterial = applyLerpToMaterial(mud, grass, lerpSum);
+
+		if(fragRelativeHeight < stoneBottom + lerpRange){
+			float lerpPos = ((fragRelativeHeight - stoneBottom) / lerpRange);
+			fragMaterial = applyLerpToMaterial(grass, stone, lerpPos);
+		}
 	}
 	else if(fragRelativeHeight > grassBottom){
 		fragMaterial = grass;
-	}
-	else if(fragRelativeHeight < mudBottom + lerpRange && fragRelativeHeight > mudBottom - lerpRange){
-		float lerpStart = mudBottom + lerpRange;
-		float lerpEnd = mudBottom - lerpRange;
-		float lerpSum = lerp(lerpStart, lerpEnd, fragRelativeHeight-lerpEnd/lerpStart-lerpEnd);
-		fragMaterial = applyLerpToMaterial(water, mud, lerpSum);
+
+		if(fragRelativeHeight < grassBottom + lerpRange){
+			float lerpPos = ((fragRelativeHeight - grassBottom) / lerpRange);
+			fragMaterial = applyLerpToMaterial(mud, grass, lerpPos);
+		}
 	}
 	else if(fragRelativeHeight > mudBottom){
 		fragMaterial = mud;
+
+		if(fragRelativeHeight < mudBottom + lerpRange){
+			float lerpPos = ((fragRelativeHeight - mudBottom) / lerpRange);
+			fragMaterial = applyLerpToMaterial(water, mud, lerpPos);
+		}
 	}
 	else{
 		fragMaterial = water;
 	}
 
-    diffuseColor += fragMaterial.diffuse;
-    specularColor += fragMaterial.specular;
-
+    diffuseColor = fragMaterial.diffuse;
+    specularColor = fragMaterial.specular;
 
     // properties
     vec3 norm = normalize(Normal);
@@ -249,10 +245,19 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 Material applyLerpToMaterial(Material from, Material to, float lerpSum){
 	Material rtr;
-	rtr.ambient = from.ambient * lerpSum + to.ambient * (1 - lerpSum);
-	rtr.diffuse = from.diffuse * lerpSum + to.diffuse * (1 - lerpSum);
-	rtr.specular = from.specular * lerpSum + to.specular * (1 - lerpSum);
-	rtr.shininess = from.shininess * lerpSum + to.shininess * (1 - lerpSum);
+	rtr.ambient.x = lerp(from.ambient.x, to.ambient.x, lerpSum);
+	rtr.ambient.y = lerp(from.ambient.y, to.ambient.y, lerpSum);
+	rtr.ambient.z = lerp(from.ambient.z, to.ambient.z, lerpSum);
+
+	rtr.diffuse.x = lerp(from.diffuse.x , to.diffuse.x, lerpSum);
+	rtr.diffuse.y = lerp(from.diffuse.y , to.diffuse.y, lerpSum);
+	rtr.diffuse.z = lerp(from.diffuse.z , to.diffuse.z, lerpSum);
+
+	rtr.specular.x = lerp(from.specular.x , to.specular.x, lerpSum);
+	rtr.specular.y = lerp(from.specular.y , to.specular.y, lerpSum);
+	rtr.specular.z = lerp(from.specular.z , to.specular.z, lerpSum);
+
+	rtr.shininess = lerp(from.shininess , to.shininess, lerpSum);
 	return rtr;
 }
 

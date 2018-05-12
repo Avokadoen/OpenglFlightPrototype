@@ -1,28 +1,5 @@
-﻿  Building Custom Rule D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/CMakeLists.txt
-  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/CMakeFiles/generate.stamp is up-to-date.
-  camera.cpp
-  loadedModel.cpp
-  main.cpp
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(24): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(25): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(151): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(233): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(234): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(238): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(239): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(241): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(242): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\main.cpp(251): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  mesh.cpp
-  model.cpp
-  shader.cpp
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\shader.cpp(50): warning C4101: 'infoLog': unreferenced local variable
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\shader.cpp(49): warning C4101: 'success': unreferenced local variable
-  terrainModel.cpp
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\terrainModel.cpp(125): warning C4018: '<': signed/unsigned mismatch
-D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\terrainModel.cpp(146): warning C4018: '<': signed/unsigned mismatch
+﻿  terrainModel.cpp
 D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\terrainModel.cpp(148): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-     Creating library D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/Debug/AkselhjExam_2531.lib and object D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/Debug/AkselhjExam_2531.exp
+D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\src\terrainModel.cpp(150): warning C4018: '<': signed/unsigned mismatch
   AkselhjExam_2531.vcxproj -> D:\Users\Avokado\Documents\Programmering\GFX prog\eksamen\AkselhjExamRepo2531\build\bin\Debug\AkselhjExam_2531.exe
   AkselhjExam_2531.vcxproj -> D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/bin/Debug/AkselhjExam_2531.pdb (Full PDB)

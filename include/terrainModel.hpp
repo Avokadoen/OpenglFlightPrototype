@@ -36,7 +36,7 @@ protected:
 		glm::vec3(0.5, 0.5, 0.5),
 		32.0f
 	};
-	const float SnowBottom = 0.80f;
+	const float SnowBottom = 0.40f;
 	const float SnowTop = 1.0f;
 
 	const Material stone = {
@@ -45,7 +45,7 @@ protected:
 		glm::vec3(0.05, 0.05, 0.05),
 		16.0f
 	};
-	const float StoneBottom = 0.6f;
+	const float StoneBottom = 0.30f;
 	const float StoneTop = 0.80f;
 
 	const Material grass = {
@@ -65,7 +65,7 @@ protected:
 		glm::vec3(0.2, 0.2, 0.2),
 		8.0f
 	};
-	const float MudBottom = 0.1f;
+	const float MudBottom = 0.08f;
 	const float MudTop = 0.2f;
 
 	const Material water = {

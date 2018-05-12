@@ -128,8 +128,13 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 	for (int i = 0; i < 6; i++) {
 		generateNormals(i);
 	}
-	for (auto&& vertex : vertices) {
-		glm::normalize(vertex.Normal);
+
+	for (int i = 0; i < indices.size(); i++) {
+		vertices[indices[i]].Normal = glm::normalize(vertices[indices[i]].Normal);
+	}
+
+	for (int i = 0; i < vertices.size(); i++) {
+		vertices[i].Normal = glm::normalize(vertices[i].Normal);
 	}
 
 	Mesh mesh(vertices, indices);
@@ -163,9 +168,7 @@ void Terrain::generateIndices() {
 }
 
 void Terrain::generateNormals(int offset) {
-	std::vector<glm::vec3> normals;
-	normals.resize(vertices.size());
-	for (unsigned int i = 0 + offset; i < vertices.size() - 3; i += 3)
+	for (unsigned int i = 0 + offset; i < indices.size() - 3; i += 3)
 	{
 		glm::vec3 v0 = vertices[indices[i + 0]].Position;
 		glm::vec3 v1 = vertices[indices[i + 1]].Position;
@@ -181,46 +184,37 @@ void Terrain::generateNormals(int offset) {
 
 void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("maxHeight", maxHeight);
-	shader.setFloat("yScale", yScale);
-	shader.setFloat("yOffset", yOffset);
-	shader.setFloat("highestPoint", highestPoint);
-	shader.setFloat("lerpRange", lerpRange * yScale); 
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
 	shader.setVec3("snow.specular", snow.specular);
 	shader.setFloat("snow.shininess", snow.shininess);
-	shader.setFloat("snowTop", SnowTop * highestPoint);
-	shader.setFloat("snowBottom", SnowBottom * highestPoint);
+	shader.setFloat("snowBottom", SnowBottom );
 	
 
 	shader.setVec3("stone.ambient", stone.ambient);
 	shader.setVec3("stone.diffuse", stone.diffuse);
 	shader.setVec3("stone.specular", stone.specular);
 	shader.setFloat("stone.shininess", stone.shininess);
-	shader.setFloat("stoneTop", StoneTop * highestPoint);
-	shader.setFloat("stoneBottom", StoneBottom * highestPoint);
+	shader.setFloat("stoneBottom", StoneBottom);
 
 
 	shader.setVec3("grass.ambient", grass.ambient);
 	shader.setVec3("grass.diffuse", grass.diffuse);
 	shader.setVec3("grass.specular", grass.specular);
 	shader.setFloat("grass.shininess", grass.shininess);
-	shader.setFloat("grassTop", GrassTop * highestPoint);
-	shader.setFloat("grassBottom", GrassBottom * highestPoint);
+	shader.setFloat("grassBottom", GrassBottom );
 
 	shader.setVec3("mud.ambient", mud.ambient);
 	shader.setVec3("mud.diffuse", mud.diffuse);
 	shader.setVec3("mud.specular", mud.specular);
 	shader.setFloat("mud.shininess", mud.shininess);
-	shader.setFloat("mudTop", MudTop * highestPoint);
-	shader.setFloat("mudBottom", MudBottom * highestPoint);
+	shader.setFloat("mudBottom", MudBottom );
 
 	shader.setVec3("water.ambient", water.ambient);
 	shader.setVec3("water.diffuse", water.diffuse);
 	shader.setVec3("water.specular", water.specular);
 	shader.setFloat("water.shininess", water.shininess);
-	shader.setFloat("waterTop", WaterTop * highestPoint);
 
 }
 
