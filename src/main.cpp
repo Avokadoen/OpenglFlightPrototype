@@ -220,8 +220,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		terrain.toggleContourStroke();
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-		terrain.toggleRunThrough();
+		terrain.toggleRunThroughSeason();
 		
 }
 

@@ -24,9 +24,11 @@ public:
 	void createTerrainMesh(float maxHeight, float minHeight, glm::vec3 primaryColor);
 	void bindMaterialsToShader(Shader shader);
 	void setSeason(float seasonValue);
-	void toggleRunThrough();
+	void toggleRunThroughSeason();
+	void toggleContourStroke();
 protected:
 	const int SecondsForAYear = 10;
+	const float contourStroke = 0.002f;
 
 	const Material snow = {
 		glm::vec3(0.7, 0.7, 0.7),
@@ -43,8 +45,8 @@ protected:
 		glm::vec3(0.9, 0.9, 0.9),
 		64.0f
 	};
-	const float SummerStoneBottom = -0.1f;
-	const float WinterStoneBottom = 0.05f;
+	const float SummerIceBottom = -0.1f;
+	const float WinterIceBottom = 0.05f;
 
 	const Material mud = {
 		glm::vec3(0.4, 0.2, 0.05),
@@ -53,7 +55,7 @@ protected:
 		8.0f
 	};
 	const float SummerMudBottom = 0.4f;
-	const float WinterMudBottom = 0.9;
+	const float WinterMudBottom = 0.09;
 
 	const Material grass = {
 		glm::vec3(0.1, 0.3, 0.1),
@@ -93,5 +95,6 @@ private:
 	float blockScale;
 	float lerpRange;
 	float seasonModifier;
+	float activeContour;
 	int seasonDirection;
 };

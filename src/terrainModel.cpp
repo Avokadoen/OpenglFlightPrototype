@@ -16,6 +16,7 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	seasonModifier = 0.0f;
 	seasonDirection = 1;
 	runThroughSeason = true;
+	activeContour = 0.0f;
 }
 
 void Terrain::update(float deltaTime) {
@@ -202,6 +203,7 @@ void Terrain::generateNormals(int offset) {
 void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("maxHeight", maxHeight);
 	shader.setFloat("seasonModifier", seasonModifier);
+	shader.setFloat("contourStroke", activeContour);
 
 	shader.setVec3("snow.ambient", snow.ambient);
 	shader.setVec3("snow.diffuse", snow.diffuse);
@@ -210,12 +212,12 @@ void Terrain::bindMaterialsToShader(Shader shader) {
 	shader.setFloat("SummerSnowBottom", SummerSnowBottom );
 	shader.setFloat("WinterSnowBottom", WinterSnowBottom);
 
-	shader.setVec3("stone.ambient", stone.ambient);
-	shader.setVec3("stone.diffuse", stone.diffuse);
-	shader.setVec3("stone.specular", stone.specular);
-	shader.setFloat("stone.shininess", stone.shininess);
-	shader.setFloat("SummerStoneBottom", SummerStoneBottom);
-	shader.setFloat("WinterStoneBottom", WinterStoneBottom);
+	shader.setVec3("ice.ambient", ice.ambient);
+	shader.setVec3("ice.diffuse", ice.diffuse);
+	shader.setVec3("ice.specular", ice.specular);
+	shader.setFloat("ice.shininess", ice.shininess);
+	shader.setFloat("SummerIceBottom", SummerIceBottom);
+	shader.setFloat("WinterIceBottom", WinterIceBottom);
 
 	shader.setVec3("grass.ambient", grass.ambient);
 	shader.setVec3("grass.diffuse", grass.diffuse);
@@ -242,6 +244,13 @@ void Terrain::setSeason(float seasonValue) {
 	seasonModifier = seasonValue;
 }
 
-void Terrain::toggleRunThrough() {
+void Terrain::toggleRunThroughSeason() {
 	runThroughSeason = !runThroughSeason;
+}
+
+void Terrain::toggleContourStroke() {
+	if (activeContour > 0) {
+		activeContour = 0;
+	}
+	else activeContour = contourStroke;
 }
