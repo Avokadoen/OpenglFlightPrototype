@@ -224,6 +224,22 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		terrain.toggleContourStroke();
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
 		terrain.toggleRunThroughSeason();
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		terrain.setSeason(0.5f);
+		terrain.goTowardsSummerSeason();
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		terrain.setSeason(0.0f);
+		terrain.goTowardsWinterSeason();
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+		terrain.setSeason(0.5f);
+		terrain.goTowardsWinterSeason();
+	}
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		terrain.setSeason(1.0f);
+		terrain.goTowardsSummerSeason();
+	}
 		
 }
 

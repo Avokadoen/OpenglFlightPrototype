@@ -7,28 +7,28 @@
 
 
 Terrain::Terrain(float maxHeight, float blockScale) {
-	this->maxHeight = maxHeight;
-	this->blockScale = blockScale;
-	yOffset = 0.0f;
-	highestPoint = 0;
-	yScale = 1.0f;
-	lerpRange = 0.05f;
-	seasonModifier = 0.0f;
-	seasonDirection = 1;
-	runThroughSeason = true;
-	activeContour = 0.0f;
+	this->maxHeight		= maxHeight;
+	this->blockScale	= blockScale;
+	yOffset				= 0.0f;
+	highestPoint		= 0;
+	yScale				= 1.0f;
+	lerpRange			= 0.05f;
+	seasonModifier		= 0.0f;
+	seasonDirection		= 1;
+	runThroughSeason	= true;
+	activeContour		= 0.0f;
 }
 
 void Terrain::update(float deltaTime) {
 	if (runThroughSeason == true) {
 		if (seasonModifier >= 1.0f) {
-			seasonDirection = -1;
+			goTowardsSummerSeason();
 		}
 
 		seasonModifier += (deltaTime / (float)SecondsForAYear) * seasonDirection;
 
 		if (seasonModifier <= 0.00f) {
-			seasonDirection = 1;
+			goTowardsWinterSeason();
 		}
 	}
 }
@@ -253,4 +253,12 @@ void Terrain::toggleContourStroke() {
 		activeContour = 0;
 	}
 	else activeContour = contourStroke;
+}
+
+void Terrain::goTowardsSummerSeason() {
+	seasonDirection = -1;
+}
+
+void Terrain::goTowardsWinterSeason() {
+	seasonDirection = 1;
 }

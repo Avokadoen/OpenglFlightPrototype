@@ -25,6 +25,8 @@ public:
 	void bindMaterialsToShader(Shader shader);
 	void setSeason(float seasonValue);
 	void toggleRunThroughSeason();
+	void goTowardsSummerSeason();
+	void goTowardsWinterSeason();
 	void toggleContourStroke();
 protected:
 	const int SecondsForAYear = 10;
