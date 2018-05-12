@@ -9,12 +9,6 @@
 
 void testLight(Shader& shader) {
 
-	shader.setBool("dirSet", true);
-	shader.setVec3("dirLight.direction", glm::vec3(1.0f, -1.0f, -0.3f));
-	shader.setVec3("dirLight.ambient", glm::vec3(0.1f, 0.05f, 0.05f));
-	shader.setVec3("dirLight.diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.setVec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
-
 	shader.setInt("spotCount", 1);
 	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	shader.setVec3("spotLight[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -130,8 +124,8 @@ int main() {
 	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
-	Sun plane(0, "assets/model/ask21mi.obj");
-
+	LoadedModel plane("assets/model/ask21mi.obj");
+	Sun theSun;
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
 	
@@ -140,10 +134,6 @@ int main() {
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	plane.translate(terrain.getActualPos());
-	plane.setOrbitTarget(terrain.getActualPos());
-	plane.translate(glm::vec3(terrain.getWidth(), 0, 0));
-	plane.scale(40.0f);
 	float lightX = 0;
 
 	terrainShader.use();
@@ -159,6 +149,9 @@ int main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		theSun.update(deltaTime);
+		theSun.syncWithShader(shader);
+		theSun.syncWithShader(terrainShader);
 		// render
 		// ------
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -174,9 +167,9 @@ int main() {
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
-
-		plane.update(deltaTime);
+	
 		plane.Draw(shader);
+
 		terrainShader.use();
 
 		testLight(terrainShader);

@@ -17,9 +17,9 @@ uniform Material snow;
 uniform float SummerSnowBottom;
 uniform float WinterSnowBottom;
 
-uniform Material stone;
-uniform float SummerStoneBottom;
-uniform float WinterStoneBottom;
+uniform Material ice;
+uniform float SummerIceBottom;
+uniform float WinterIceBottom;
 
 uniform Material grass;
 uniform float SummerGrassBottom;
@@ -34,6 +34,7 @@ uniform float waterBottom;
 
 uniform float maxHeight;
 uniform float seasonModifier;
+uniform float contourStroke;
 
 /*      LIGHT EMITTER DEFINITIONS       */
 struct DirLight {
@@ -104,8 +105,6 @@ float lerp(float v0, float v1, float t);
 
 
 /*      VARIABLES DECLARATIONS       */
-vec3 diffuseColor;
-vec3 specularColor;
 Material fragMaterial;
 
 void main()
@@ -114,7 +113,7 @@ void main()
 	float fragRelativeHeight = FragPos.y/maxHeight;
 
 	float snowBottom = lerp(SummerSnowBottom, WinterSnowBottom, seasonModifier);
-	float stoneBottom = lerp(SummerStoneBottom, WinterStoneBottom, seasonModifier);
+	float iceBottom = lerp(SummerIceBottom, WinterIceBottom, seasonModifier);
 	float grassBottom = lerp(SummerGrassBottom, WinterGrassBottom, seasonModifier);
 	float mudBottom = lerp(SummerMudBottom, WinterMudBottom, seasonModifier);
 
@@ -126,6 +125,9 @@ void main()
 			fragMaterial = applyLerpToMaterial(mud, snow, lerpPos);
 		}
 	}
+	else if(fragRelativeHeight < (snowBottom + contourStroke) && fragRelativeHeight > (snowBottom - contourStroke)){
+		// black
+	}
 	else if(fragRelativeHeight > mudBottom){
 		fragMaterial = mud;
 
@@ -133,6 +135,9 @@ void main()
 			float lerpPos = ((fragRelativeHeight - mudBottom) / lerpRange);
 			fragMaterial = applyLerpToMaterial(grass, mud, lerpPos);
 		}
+	}
+	else if(fragRelativeHeight < (mudBottom + contourStroke) && fragRelativeHeight > (mudBottom - contourStroke)){
+		// black
 	}
 	else if(fragRelativeHeight > grassBottom){
 		fragMaterial = grass;
@@ -142,12 +147,15 @@ void main()
 			fragMaterial = applyLerpToMaterial(water, grass, lerpPos);
 		}
 	}
+	else if(fragRelativeHeight < (grassBottom + contourStroke) && fragRelativeHeight > (grassBottom - contourStroke)){
+		// black
+	}
 	else{
 		fragMaterial = water;
 	}
 
-    diffuseColor += fragMaterial.diffuse;
-    specularColor += fragMaterial.specular;
+
+    fragMaterial.specular;
 
 
     // properties
@@ -188,9 +196,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), fragMaterial.shininess); // mat.shininess
     // combine results
-    vec3 ambient = light.ambient * diffuseColor;
-    vec3 diffuse = light.diffuse * diff * diffuseColor;
-    vec3 specular = light.specular * spec * specularColor;
+    vec3 ambient = light.ambient *  fragMaterial.diffuse;
+    vec3 diffuse = light.diffuse * diff *  fragMaterial.diffuse;
+    vec3 specular = light.specular * spec *  fragMaterial.specular;
     return (ambient + diffuse + specular);
 }
 
@@ -207,9 +215,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // combine results
-    vec3 ambient = light.ambient * diffuseColor;
-    vec3 diffuse = light.diffuse * diff * diffuseColor;
-    vec3 specular = light.specular * spec * specularColor;
+    vec3 ambient = light.ambient *  fragMaterial.diffuse;
+    vec3 diffuse = light.diffuse * diff *  fragMaterial.diffuse;
+    vec3 specular = light.specular * spec *  fragMaterial.specular;
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
@@ -233,9 +241,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
-    vec3 ambient = light.ambient * diffuseColor;
-    vec3 diffuse = light.diffuse * diff * diffuseColor;
-    vec3 specular = light.specular * spec * specularColor;
+    vec3 ambient = light.ambient *  fragMaterial.diffuse;
+    vec3 diffuse = light.diffuse * diff *  fragMaterial.diffuse;
+    vec3 specular = light.specular * spec *  fragMaterial.specular;
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
