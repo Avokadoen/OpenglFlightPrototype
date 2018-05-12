@@ -14,10 +14,22 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	yScale = 1.0f;
 	lerpRange = 0.05f;
 	seasonModifier = 0.0f;
+	seasonDirection = 1;
+	runThroughSeason = true;
 }
 
 void Terrain::update(float deltaTime) {
-	seasonModifier += deltaTime / (float)SecondsForAYear;
+	if (runThroughSeason == true) {
+		if (seasonModifier >= 1.0f) {
+			seasonDirection = -1;
+		}
+
+		seasonModifier += (deltaTime / (float)SecondsForAYear) * seasonDirection;
+
+		if (seasonModifier <= 0.00f) {
+			seasonDirection = 1;
+		}
+	}
 }
 
 bool Terrain::generateHeightValues() {
@@ -228,4 +240,8 @@ void Terrain::bindMaterialsToShader(Shader shader) {
 
 void Terrain::setSeason(float seasonValue) {
 	seasonModifier = seasonValue;
+}
+
+void Terrain::toggleRunThrough() {
+	runThroughSeason = !runThroughSeason;
 }

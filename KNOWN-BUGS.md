@@ -18,5 +18,8 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 ## LEVEL 2:
 
-
 ## LEVEL 1:
+
+- Description: Season backtracks as it starts to become summer, and then turns to summer again-
+- Possible solution:
+- Cause: Something to do with my if check Terrain::update()

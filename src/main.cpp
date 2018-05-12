@@ -67,6 +67,9 @@ float lastFrame = 0.0f;
 
 bool lightToggle = false;
 
+// The world:
+Terrain terrain(70.0f, 2.0f);
+
 int main() {
 
 	if (!glfwInit())
@@ -124,7 +127,7 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	Terrain terrain(70.0f, 2.0f);
+	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	LoadedModel plane("assets/model/ask21mi.obj");
@@ -143,6 +146,7 @@ int main() {
 
 	terrainShader.use();
 	terrain.bindMaterialsToShader(terrainShader);
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -216,6 +220,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+		terrain.toggleRunThrough();
 		
 }
 
