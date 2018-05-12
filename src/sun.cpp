@@ -2,10 +2,64 @@
 #include "sun.hpp"
 
 Sun::Sun() {
-	time = NIGHT;
+	time = DAY;
+	skyColor = DaySkyColor;
 	lerpPos = 0;
 	secondsInADay = 5.0f;
 	currentLight = Day;
+	timeRunning = true;
+}
+
+void Sun::update(float deltaTime) {
+	if (timeRunning) {
+		if (time == DAY) {
+			if (lerpPos < 1.0f) {
+				currentLight = lerpDirLight(Day, Dusk, lerpPos);
+				skyColor = lerpVec(DaySkyColor, DuskSkyColor, lerpPos);
+				lerpPos += deltaTime / secondsInADay;
+			}
+			else {
+				time = DUSK;
+				lerpPos = 0;
+			}
+		}
+
+		if (time == DUSK) {
+			if (lerpPos < 1.0f) {
+				currentLight = lerpDirLight(Dusk, Night, lerpPos);
+				skyColor = lerpVec(DuskSkyColor, NightSkyColor, lerpPos);
+				lerpPos += deltaTime / secondsInADay;
+			}
+			else {
+				time = NIGHT;
+				lerpPos = 0;
+			}
+		}
+
+		if (time == NIGHT) {
+			if (lerpPos < 1.0f) {
+				currentLight = lerpDirLight(Night, Dawn, lerpPos);
+				skyColor = lerpVec(NightSkyColor, DawnSkyColor, lerpPos);
+				lerpPos += deltaTime / secondsInADay;
+			}
+			else {
+				time = DAWN;
+				lerpPos = 0;
+			}
+		}
+
+		if (time == DAWN) {
+			if (lerpPos < 1.0f) {
+				currentLight = lerpDirLight(Dawn, Day, lerpPos);
+				skyColor = lerpVec(DawnSkyColor, DaySkyColor, lerpPos);
+				lerpPos += deltaTime / secondsInADay;
+			}
+			else {
+				time = DAY;
+				lerpPos = 0;
+			}
+		}
+	}
 }
 
 void Sun::syncWithShader(Shader shader) {
@@ -16,50 +70,17 @@ void Sun::syncWithShader(Shader shader) {
 	shader.setVec3("dirLight.specular", currentLight.specular);
 }
 
-void Sun::update(float deltaTime) {
-	if (time == DAY) {
-		if (lerpPos < 1.0f) {
-			currentLight = lerpDirLight(Day, Dusk, lerpPos);
-			lerpPos += deltaTime / secondsInADay;
-		}
-		else {
-			time = DUSK;
-			lerpPos = 0;
-		}
-	}
+glm::vec3 Sun::getSkyColor() {
+	return skyColor;
+}
 
-	if (time == DUSK) {
-		if (lerpPos < 1.0f) {
-			currentLight = lerpDirLight(Dusk, Night, lerpPos);
-			lerpPos += deltaTime / secondsInADay;
-		}
-		else {
-			time = NIGHT;
-			lerpPos = 0;
-		}
-	}
+void Sun::toggleTime() {
+	timeRunning = !timeRunning;
+}
 
-	if (time == NIGHT) {
-		if (lerpPos < 1.0f) {
-			currentLight = lerpDirLight(Night, Dawn, lerpPos);
-			lerpPos += deltaTime / secondsInADay;
-		}
-		else {
-			time = DAWN;
-			lerpPos = 0;
-		}
-	}
-
-	if (time == DAWN) {
-		if (lerpPos < 1.0f) {
-			currentLight = lerpDirLight(Dawn, Day, lerpPos);
-			lerpPos += deltaTime / secondsInADay;
-		}
-		else {
-			time = DAY;
-			lerpPos = 0;
-		}
-	}
+void Sun::setTime(TimeOfTheDay time, float lerpPos) {
+	this->time = time;
+	this->lerpPos = lerpPos;
 }
 
 DirLight Sun::lerpDirLight(DirLight v0, DirLight v1, float t) {
@@ -82,3 +103,4 @@ glm::vec3 Sun::lerpVec(glm::vec3 v0, glm::vec3 v1, float t) {
 float Sun::lerp(float v0, float v1, float t){
 	return (1 - t) * v0 + t * v1;
 }
+

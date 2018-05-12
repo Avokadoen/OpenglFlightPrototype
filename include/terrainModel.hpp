@@ -71,16 +71,14 @@ protected:
 	const float SummerGrassBottom = 0.15f;
 	const float WinterGrassBottom = 0.08f;
 
-
 	const Material water = {
 		glm::vec3(0.1, 0.1, 0.3),
 		glm::vec3(0.2, 0.2, 0.6),
-		glm::vec3(0.9, 0.9, 0.9),
-		64.0f
+		glm::vec3(0.8, 0.8, 0.8),
+		32.0f
 	};
 	const float SummerWaterBottom = 0.00f;
 	const float WinterWaterBottom = 0.00f;
-
 
 	
 private:

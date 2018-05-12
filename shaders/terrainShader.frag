@@ -7,12 +7,6 @@ struct Material {
   vec3 specular;
   float shininess;
 };
-struct Material {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  float shininess;
-};
 uniform Material snow;
 uniform float SummerSnowBottom;
 uniform float WinterSnowBottom;
@@ -88,14 +82,6 @@ in vec3 Normal;
 uniform vec3 viewPos;
 in vec3 FragPos;
 
-#define MAX_NR_DIFFUSE 5
-uniform sampler2D texture_diffuse[MAX_NR_DIFFUSE];
-uniform int diffuseCount;
-
-#define MAX_NR_SPECULAR 5
-uniform sampler2D texture_specular[MAX_NR_SPECULAR];
-uniform int specularCount;
-
 /*      FUNCTION DECLARATIONS       */
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -153,10 +139,6 @@ void main()
 	else{
 		fragMaterial = water;
 	}
-
-
-    fragMaterial.specular;
-
 
     // properties
     vec3 norm = normalize(Normal);

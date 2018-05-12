@@ -19,23 +19,6 @@ void testLight(Shader& shader) {
 	shader.setFloat("spotLight[0].linear", 0.007);
 	shader.setFloat("spotLight[0].quadratic", 0.0002);
 
-
-	// LIGHT CLASS STUFF
-	/*shader.setBool("light.isDirection", lightToggle);
-	shader.setVec3("light.position", camera.Position);
-	shader.setVec3("light.direction", camera.Front);
-	shader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-	shader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-	shader.setVec3("light.ambient", 0.05f, 0.05f, 0.05f);
-	shader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-	shader.setVec3("light.specular", 0.5f, 0.5f, 0.5f);
-
-	// light 600 distance
-
-	shader.setFloat("light.constant", 1.0f);
-	shader.setFloat("light.linear", 0.007);
-	shader.setFloat("light.quadratic", 0.0002);
-	shader.setVec3("viewPos", camera.Position);*/
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -63,6 +46,7 @@ bool lightToggle = false;
 
 // The world:
 Terrain terrain(70.0f, 2.0f);
+Sun theSun;
 
 int main() {
 
@@ -125,7 +109,7 @@ int main() {
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	LoadedModel plane("assets/model/ask21mi.obj");
-	Sun theSun;
+
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
 	
@@ -154,7 +138,8 @@ int main() {
 		theSun.syncWithShader(terrainShader);
 		// render
 		// ------
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		glm::vec3 skyColor = theSun.getSkyColor();
+		glClearColor(skyColor.x, skyColor.y, skyColor.z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.use();
@@ -187,6 +172,17 @@ int main() {
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			camera.ProcessKeyboard(FORWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			camera.ProcessKeyboard(BACKWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			camera.ProcessKeyboard(LEFT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			camera.ProcessKeyboard(RIGHT, deltaTime);
 		
 	}
 
@@ -206,15 +202,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		terrain.toggleContourStroke();
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
@@ -235,7 +222,25 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		terrain.setSeason(1.0f);
 		terrain.goTowardsSummerSeason();
 	}
-		
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		terrain.setSeason(1.0f);
+		terrain.goTowardsSummerSeason();
+	}
+	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
+		theSun.setTime(DAY, 0.0f);
+	}
+	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
+		theSun.setTime(DUSK, 0.0f);
+	}
+	if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS) {
+		theSun.setTime(NIGHT, 0.0f);
+	}
+	if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS) {
+		theSun.setTime(DAWN, 0.0f);
+	}
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+		theSun.toggleTime();
+	}
 }
 
 

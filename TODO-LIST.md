@@ -23,3 +23,9 @@ Example:
 ## 2 TODO:
 
 ## 1 TODO:
+
+
+- You will need to provide a free-moving camera, whose orientation is controlled by the mouse
+and whose position is controlled using the keys ‘i’ and ‘k’ for z axis, ‘j’ and ‘l’ for x axis, and ‘y’
+and ‘h’ for y axis. Implement zooming in or out of the scene using ‘n’ and ‘m’.
+o Ensure that the sensitivity is reasonable.
