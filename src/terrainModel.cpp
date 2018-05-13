@@ -263,6 +263,20 @@ void Terrain::goTowardsWinterSeason() {
 	seasonDirection = 1;
 }
 
+std::string Terrain::getSeasonString() {
+	if (seasonModifier >= 0.65)
+		return "Winter";
+	else if (seasonModifier <= 0.35) {
+		return "Summer";
+	}
+	else {
+		if (seasonDirection > 0) {
+			return "Autumn";
+		}
+		else return "Spring";
+	}
+}
+
 glm::vec3 Terrain::getActualPos() {
 	auto middle = vertices.begin() + ((imageHeight / 2) * imageWidth) + (imageWidth / 2);
 	return middle->Position;

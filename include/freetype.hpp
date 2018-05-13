@@ -23,11 +23,10 @@ struct Character {
 class FreeType {
 public:
 	FreeType();
-	void loadFont();
+	void loadFont(int screenX, int screenY);
 	void RenderText(Shader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	void setOrthoRange(float y, float x);
 private:
-
 	std::map<GLchar, Character> Characters;
 	GLuint VAO, VBO;
 	glm::mat4 projection;

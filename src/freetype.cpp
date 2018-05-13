@@ -3,7 +3,7 @@
 FreeType::FreeType() {
 	
 }
-void FreeType::loadFont() {
+void FreeType::loadFont(int screenX, int screenY) {
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
@@ -63,7 +63,7 @@ void FreeType::loadFont() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	projection = glm::ortho(0.0f, (float)screenY, 0.0f, (float)screenX);
 	
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);

@@ -9,19 +9,6 @@
 #include "freetype.hpp"
 
 
-void testLight(Shader& shader) {
-	shader.setInt("spotCount", 1);
-	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	shader.setVec3("spotLight[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-	shader.setVec3("spotLight[0].specular", glm::vec3(0.6f, 0.6f, 0.6f));
-	shader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(16.0f)));
-	shader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
-	shader.setFloat("spotLight[0].constant", 1.0f);
-	shader.setFloat("spotLight[0].linear", 0.007);
-	shader.setFloat("spotLight[0].quadratic", 0.0002);
-
-}
-
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void error_callback(int error, const char* description);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -30,8 +17,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 800;
+
+// screen
+unsigned int screenWidth = SCR_WIDTH;
+unsigned int screenHeight = SCR_HEIGHT;
 
 // camera
 Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
@@ -109,7 +100,7 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	freeType.loadFont();
+	freeType.loadFont(SCR_WIDTH, SCR_HEIGHT);
 	freeType.setOrthoRange(SCR_WIDTH, SCR_HEIGHT);
 	Shader textShader("shaders/freetype.vert", "shaders/freetype.frag");
 
@@ -171,10 +162,11 @@ int main() {
 		terrain.bindMaterialsToShader(terrainShader);
 
 		textShader.use();
-		freeType.RenderText(textShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-		freeType.RenderText(textShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-		
-		
+		freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		//freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100 - 10, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.75, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		//freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.75, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+	
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -236,13 +228,13 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		theSun.setTime(DAY, 0.0f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
-		theSun.setTime(DUSK, 0.0f);
+		theSun.setTime(NOON, 0.0f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS) {
 		theSun.setTime(NIGHT, 0.0f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS) {
-		theSun.setTime(DAWN, 0.0f);
+		theSun.setTime(MORNING, 0.0f);
 	}
 	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
 		theSun.toggleTime();
@@ -257,6 +249,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
+	screenWidth = width;
+	screenHeight = height;
 	freeType.setOrthoRange(width, height);
 	glViewport(0, 0, width, height);
 }

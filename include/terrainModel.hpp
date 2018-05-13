@@ -29,6 +29,7 @@ public:
 	void goTowardsWinterSeason();
 	void toggleContourStroke();
 
+	std::string getSeasonString();
 	glm::vec3 getActualPos();
 	float getWidth();
 protected:

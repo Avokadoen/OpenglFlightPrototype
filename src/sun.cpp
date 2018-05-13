@@ -14,20 +14,20 @@ void Sun::update(float deltaTime) {
 	if (timeRunning) {
 		if (time == DAY) {
 			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Day, Dusk, lerpPos);
-				skyColor = lerpVec(DaySkyColor, DuskSkyColor, lerpPos);
+				currentLight = lerpDirLight(Day, Noon, lerpPos);
+				skyColor = lerpVec(DaySkyColor, NoonSkyColor, lerpPos);
 				lerpPos += deltaTime / secondsInADay;
 			}
 			else {
-				time = DUSK;
+				time = NOON;
 				lerpPos = 0;
 			}
 		}
 
-		if (time == DUSK) {
+		if (time == NOON) {
 			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Dusk, Night, lerpPos);
-				skyColor = lerpVec(DuskSkyColor, NightSkyColor, lerpPos);
+				currentLight = lerpDirLight(Noon, Night, lerpPos);
+				skyColor = lerpVec(NoonSkyColor, NightSkyColor, lerpPos);
 				lerpPos += deltaTime / secondsInADay;
 			}
 			else {
@@ -38,20 +38,20 @@ void Sun::update(float deltaTime) {
 
 		if (time == NIGHT) {
 			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Night, Dawn, lerpPos);
-				skyColor = lerpVec(NightSkyColor, DawnSkyColor, lerpPos);
+				currentLight = lerpDirLight(Night, Morning, lerpPos);
+				skyColor = lerpVec(NightSkyColor, MorningSkyColor, lerpPos);
 				lerpPos += deltaTime / secondsInADay;
 			}
 			else {
-				time = DAWN;
+				time = MORNING;
 				lerpPos = 0;
 			}
 		}
 
-		if (time == DAWN) {
+		if (time == MORNING) {
 			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Dawn, Day, lerpPos);
-				skyColor = lerpVec(DawnSkyColor, DaySkyColor, lerpPos);
+				currentLight = lerpDirLight(Morning, Day, lerpPos);
+				skyColor = lerpVec(MorningSkyColor, DaySkyColor, lerpPos);
 				lerpPos += deltaTime / secondsInADay;
 			}
 			else {
@@ -84,6 +84,34 @@ void Sun::setTime(TimeOfTheDay time, float lerpPos) {
 	this->lerpPos = lerpPos;
 }
 
+std::string Sun::getTimeString() {
+	std::string rtrString;
+	float minutes;
+	switch (time) {
+	case DAY:
+		minutes = lerp(720, 1080, lerpPos);
+		rtrString = "Day, ";
+		getTimeFromMinuteInString(minutes, rtrString);
+		break;
+	case NOON:
+		minutes = lerp(1080, 1440, lerpPos);
+		rtrString = "Noon, ";
+		getTimeFromMinuteInString(minutes, rtrString);
+		break;
+	case NIGHT:
+		minutes = lerp(0, 360, lerpPos);
+		rtrString = "Night, ";
+		getTimeFromMinuteInString(minutes, rtrString);
+		break;
+	case MORNING:
+		minutes = lerp(360, 720, lerpPos);
+		rtrString = "Morning, ";
+		getTimeFromMinuteInString(minutes, rtrString);
+		break;
+	}
+	return rtrString;
+}
+
 DirLight Sun::lerpDirLight(DirLight v0, DirLight v1, float t) {
 	DirLight outPut;
 	outPut.direction	= lerpVec(v0.direction, v1.direction, t);
@@ -103,5 +131,16 @@ glm::vec3 Sun::lerpVec(glm::vec3 v0, glm::vec3 v1, float t) {
 
 float Sun::lerp(float v0, float v1, float t){
 	return (1 - t) * v0 + t * v1;
+}
+
+void Sun::getTimeFromMinuteInString(float minutes, std::string& time) {
+	int hours = minutes / 60;
+	int clockMinutes = (int)minutes % 60;
+
+
+	time.append(std::to_string(hours));
+	time.append(":");
+	if(clockMinutes < 10) time.append("0");
+	time.append(std::to_string(clockMinutes));
 }
 
