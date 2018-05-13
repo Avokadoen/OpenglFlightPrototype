@@ -110,6 +110,9 @@ int main() {
 	glfwSwapInterval(1);
 
 	freeType.loadFont();
+	freeType.setOrthoRange(SCR_WIDTH, SCR_HEIGHT);
+	Shader textShader("shaders/freetype.vert", "shaders/freetype.frag");
+
 	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
@@ -147,11 +150,9 @@ int main() {
 		glClearColor(skyColor.x, skyColor.y, skyColor.z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
 		shader.use();
-	
-		testLight(shader);
-		shader.setVec3("spotLight[0].position", camera.Position);
-		shader.setVec3("spotLight[0].direction", camera.Front);
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -161,11 +162,6 @@ int main() {
 		plane.Draw(shader);
 
 		terrainShader.use();
-
-		testLight(terrainShader);
-		terrainShader.setVec3("spotLight[0].position", camera.Position);
-		terrainShader.setVec3("spotLight[0].direction", camera.Front);
-	
 		terrainShader.setMat4("projection", projection);
 		terrainShader.setMat4("view", view);
 		terrainShader.setVec3("lightPos", camera.Position);
@@ -173,6 +169,11 @@ int main() {
 		terrain.Draw(terrainShader);
 		terrain.update(deltaTime);
 		terrain.bindMaterialsToShader(terrainShader);
+
+		textShader.use();
+		freeType.RenderText(textShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		freeType.RenderText(textShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+		
 		
 
 		glfwSwapBuffers(window);
@@ -256,6 +257,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
+	freeType.setOrthoRange(width, height);
 	glViewport(0, 0, width, height);
 }
 

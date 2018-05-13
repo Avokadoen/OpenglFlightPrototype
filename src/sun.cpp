@@ -63,6 +63,7 @@ void Sun::update(float deltaTime) {
 }
 
 void Sun::syncWithShader(Shader shader) {
+	shader.use();
 	shader.setBool("dirSet", true);
 	shader.setVec3("dirLight.direction", currentLight.direction);
 	shader.setVec3("dirLight.ambient", currentLight.ambient);
