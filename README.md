@@ -31,3 +31,4 @@
     - This was a big inspiration for the model loading and model structure.
       Would
 - https://www.3dgep.com/multi-textured-terrain-in-opengl/#The_Terrain_Header_File
+- https://learnopengl.com/In-Practice/Text-Rendering

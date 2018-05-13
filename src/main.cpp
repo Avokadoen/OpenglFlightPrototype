@@ -109,7 +109,7 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	freeType.init();
+	freeType.loadFont();
 	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
