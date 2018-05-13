@@ -1,9 +1,11 @@
 #pragma once
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include "GL/glew.h"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
-
+#include "gtx/matrix_decompose.hpp"
+#include "gtx/quaternion.hpp"
 
 #include <vector>
 
@@ -40,6 +42,7 @@ public:
 	glm::vec3 Right;
 	glm::vec3 WorldUp;
 	CameraState state;
+	glm::mat4 targetRotation;
 	// Euler Angles
 	float Yaw;
 	float Pitch;
@@ -53,10 +56,9 @@ public:
 	// Constructor with scalar values
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
-	// TODO
-	void setPosition(glm::vec3 position);
-
 	void rotateState();
+
+	void update(glm::mat4 transform);
 
 	// Returns the view matrix calculated using Euler Angles and the LookAt Matrix
 	glm::mat4 GetViewMatrix();

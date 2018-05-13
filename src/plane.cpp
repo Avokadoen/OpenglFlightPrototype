@@ -19,6 +19,8 @@ Plane::Plane(char* path, glm::vec3 velocity,
 	this->yawSpeed		= yawSpeed;
 	this->rollSpeed		= rollSpeed;
 	this->acceleration	= acceleration;
+	float yaw = 0.0f;
+	float pitch = 0.0f;
 
 }
 

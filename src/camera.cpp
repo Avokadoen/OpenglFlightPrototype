@@ -30,9 +30,6 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Camera::setPosition(glm::vec3 position) {
-	this->Position = position;
-}
 
 void Camera::rotateState() {
 	if (state == FREEMOVE) {
@@ -45,6 +42,19 @@ void Camera::rotateState() {
 		state = FREEMOVE;
 	}
 	else state = FREEMOVE;
+}
+
+void Camera::update(glm::mat4 transform) {
+	if (state == LOCK_TO_TARGET) {
+		glm::quat rotation;
+		glm::vec3 position;
+		glm::decompose(transform, glm::vec3(), rotation, position, glm::vec3(), glm::vec4());
+
+		Position = position;
+		targetRotation = glm::toMat4(rotation);
+
+		updateCameraVectors();
+	}
 }
 
 // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -89,23 +99,25 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
 {
-	xoffset *= MouseSensitivity;
-	yoffset *= MouseSensitivity;
+	if (state != LOCK_TO_TARGET) {
+		xoffset *= MouseSensitivity;
+		yoffset *= MouseSensitivity;
 
-	Yaw += xoffset;
-	Pitch += yoffset;
+		Yaw += xoffset;
+		Pitch += yoffset;
 
-	// Make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (constrainPitch)
-	{
-		if (Pitch > 89.0f)
-			Pitch = 89.0f;
-		if (Pitch < -89.0f)
-			Pitch = -89.0f;
+		// Make sure that when pitch is out of bounds, screen doesn't get flipped
+		if (constrainPitch)
+		{
+			if (Pitch > 89.0f)
+				Pitch = 89.0f;
+			if (Pitch < -89.0f)
+				Pitch = -89.0f;
+		}
+
+		// Update Front, Right and Up Vectors using the updated Euler angles
+		updateCameraVectors();
 	}
-
-	// Update Front, Right and Up Vectors using the updated Euler angles
-	updateCameraVectors();
 }
 
 
@@ -123,13 +135,22 @@ void Camera::ProcessMouseScroll(float yoffset)
 // Calculates the front vector from the Camera's (updated) Euler Angles
 void Camera::updateCameraVectors()
 {
-	// Calculate the new Front vector
-	glm::vec3 front;
-	front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-	front.y = sin(glm::radians(Pitch));
-	front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-	Front = glm::normalize(front);
-	// Also re-calculate the Right and Up vector
-	Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-	Up = glm::normalize(glm::cross(Right, Front));
+	if (state != LOCK_TO_TARGET) {
+		// Calculate the new Front vector
+		glm::vec3 front;
+		front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+		front.y = sin(glm::radians(Pitch));
+		front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+		Front = glm::normalize(front);
+		// Also re-calculate the Right and Up vector
+		Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+		Up = glm::normalize(glm::cross(Right, Front));
+	}
+	else {
+		glm::vec3 up = glm::vec3(0, 1, 0);
+		Up = glm::normalize(glm::vec4(up, 1) * targetRotation);
+
+		glm::vec3 front = glm::vec3(-1, 0, 0);
+		Front = glm::normalize(glm::vec4(front, 1) * targetRotation);
+	}
 }

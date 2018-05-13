@@ -192,6 +192,7 @@ int main() {
 
 		plane.inputHandler(frameInput);
 		plane.update(deltaTime);
+		camera.update(plane.getTransform());
 
 		// render
 		// ------
