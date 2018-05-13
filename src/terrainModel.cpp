@@ -147,10 +147,6 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 		generateNormals(i);
 	}
 
-	for (int i = 0; i < indices.size(); i++) {
-		vertices[indices[i]].Normal = glm::normalize(vertices[indices[i]].Normal);
-	}
-
 	for (int i = 0; i < vertices.size(); i++) {
 		vertices[i].Normal = glm::normalize(vertices[i].Normal);
 	}

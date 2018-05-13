@@ -8,21 +8,31 @@
 #include "sun.hpp"
 #include "freetype.hpp"
 
+#include <memory>
 
+
+// callback functions for glfw
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void error_callback(int error, const char* description);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 1000;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 1400;
+const unsigned int SCR_HEIGHT = 900;
 
 // screen
-unsigned int screenWidth = SCR_WIDTH;
-unsigned int screenHeight = SCR_HEIGHT;
+std::unique_ptr<int> screenWidth = std::make_unique<int>(SCR_WIDTH);
+std::unique_ptr<int> screenHeight = std::make_unique<int>(SCR_HEIGHT);
+std::unique_ptr<int> screenPosX = std::make_unique<int>(0);
+std::unique_ptr<int> screenPosY = std::make_unique<int>(SCR_HEIGHT);
+
+// fullscreen oriente
+bool isFullScreen = false;
+std::unique_ptr<int> prevScreenWidth = std::make_unique<int>(SCR_WIDTH);
+std::unique_ptr<int> prevScreenHeight = std::make_unique<int>(SCR_HEIGHT);
+void toggleFullscreen(GLFWwindow* window);
 
 // camera
 Camera camera(glm::vec3(0.0f, 10.0f, 30.0f));
@@ -37,7 +47,7 @@ float lastFrame = 0.0f;
 bool lightToggle = false;
 
 // The world:
-Terrain terrain(70.0f, 2.0f);
+Terrain terrain(150.0f, 1.0f);
 Sun theSun;
 
 // text
@@ -55,7 +65,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
 #endif
 
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Exam", nullptr, nullptr); // glfwGetPrimaryMonitor()
@@ -105,7 +115,7 @@ int main() {
 	Shader textShader("shaders/freetype.vert", "shaders/freetype.frag");
 
 	
-	terrain.loadHeightMapData("assets/heightmap/height100.png");
+	terrain.loadHeightMapData("assets/heightmap/height50.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	LoadedModel plane("assets/model/ask21mi.obj");
 
@@ -162,16 +172,14 @@ int main() {
 		terrain.bindMaterialsToShader(terrainShader);
 
 		textShader.use();
-		freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100 - 10, screenHeight * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
-		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.70, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.70 - 10, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100 - 10, (*screenHeight) * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
+		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70 - 10, (*screenHeight) * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
 	
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
-
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -239,6 +247,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
 		theSun.toggleTime();
 	}
+	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
+		toggleFullscreen(window);
+	}
 }
 
 
@@ -249,8 +260,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
-	screenWidth = width;
-	screenHeight = height;
+	*screenWidth = width;
+	*screenHeight = height;
 	freeType.setOrthoRange(width, height);
 	glViewport(0, 0, width, height);
 }
@@ -280,4 +291,49 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(yoffset);
+}
+
+void toggleFullscreen(GLFWwindow* window) {
+	if (!isFullScreen) {
+
+		// create pointers to retrieve window data
+		int* posX	= new int;
+		int* posY	= new int;
+		int* width	= new int;
+		int* height = new int;
+
+		// retrieve data from glfw
+		glfwGetWindowPos(window, posX, posY);
+		glfwGetWindowSize(window, width, height);
+
+		// backup window position and window size
+		screenPosX = std::make_unique<int>(*posX);
+		screenPosY = std::make_unique<int>(*posY);
+		prevScreenWidth = std::make_unique<int>(*width);
+		prevScreenHeight = std::make_unique<int>(*height);
+
+		// clean up
+		delete posX;
+		delete posY;
+		delete width;
+		delete height;
+
+		// get reolution of monitor
+		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+		// swithc to full screen
+		glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, 0);
+		glfwSwapInterval(1);
+		isFullScreen = true;
+	}
+	else {
+		// restore last window size and position
+		glfwSetWindowMonitor(window, nullptr, *screenPosX, *screenPosY, *prevScreenWidth, *prevScreenHeight, 0);
+		screenWidth	= std::make_unique<int>(*prevScreenWidth);
+		screenHeight = std::make_unique<int>(*prevScreenHeight);
+		isFullScreen = false;
+	}
+
+
+	
 }
