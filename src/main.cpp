@@ -151,31 +151,28 @@ int main() {
 		// deal with input
 		glfwPollEvents();
 
+		// plane input
 		frameInput.reset();
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			frameInput.pitchKey = true;
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 			frameInput.yawKey = true;
-			//camera.ProcessKeyboard(BACKWARD, deltaTime);
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 			frameInput.rightBarrelRollKey = true;
-			//camera.ProcessKeyboard(LEFT, deltaTime);
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 			frameInput.leftBarrelRollLey = true;
-			//camera.ProcessKeyboard(RIGHT, deltaTime);
 		}
-		/*if (glfwGetKey(window, GLFW_KEY_) == GLFW_PRESS) {
-		frameInput.leftBarrelRollLey = true;
-		//camera.ProcessKeyboard(RIGHT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS) {
+			frameInput.accelKey = true;
 		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		frameInput.leftBarrelRollLey = true;
-		//camera.ProcessKeyboard(RIGHT, deltaTime);
-		}*/
-
+		if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+			frameInput.breakKey = true;
+		}
+	
+		// camera
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 			camera.ProcessKeyboard(FORWARD, deltaTime);
 		}

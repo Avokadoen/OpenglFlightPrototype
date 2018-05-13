@@ -127,9 +127,9 @@ Mesh LoadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 
 	// Retrieve material data incase it doesn't use textures
 	Material meshMaterial;
-	material->Get(AI_MATKEY_COLOR_AMBIENT, meshMaterial.ambient);
-	material->Get(AI_MATKEY_COLOR_DIFFUSE, meshMaterial.diffuse);
-	material->Get(AI_MATKEY_COLOR_SPECULAR, meshMaterial.specular);
+	material->Get(AI_MATKEY_COLOR_AMBIENT, meshMaterial.ambient[0]);
+	material->Get(AI_MATKEY_COLOR_DIFFUSE, meshMaterial.diffuse[0]);
+	material->Get(AI_MATKEY_COLOR_SPECULAR, meshMaterial.specular[0]);
 	material->Get(AI_MATKEY_SHININESS, meshMaterial.shininess);
 	// return a mesh object created from the extracted mesh data
 	return Mesh(vertices, indices, textures, meshMaterial);

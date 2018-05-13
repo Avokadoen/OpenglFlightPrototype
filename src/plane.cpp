@@ -1,5 +1,6 @@
 #include "plane.hpp"
 
+
 void PlaneInput::reset() {
 
 	pitchKey			= false;
@@ -56,4 +57,10 @@ void Plane::inputHandler(PlaneInput frameInput) {
 	inputBuffer.breakKey			= (inputBuffer.breakKey				|| frameInput.breakKey);
 	inputBuffer.accelKey			= (inputBuffer.accelKey				|| frameInput.accelKey);
 
+}
+
+glm::vec3 Plane::getPostion() {
+	glm::vec3 position;
+	glm::decompose(transform, glm::vec3(), glm::quat(), position, glm::vec3(), glm::vec4());
+	return position;
 }
