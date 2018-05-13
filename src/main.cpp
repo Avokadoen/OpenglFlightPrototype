@@ -173,17 +173,17 @@ int main() {
 		}
 	
 		// camera
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
 			camera.ProcessKeyboard(FORWARD, deltaTime);
 		}
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
 			camera.ProcessKeyboard(BACKWARD, deltaTime);
 		}
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-			camera.ProcessKeyboard(LEFT, deltaTime);
-		}
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
 			camera.ProcessKeyboard(RIGHT, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+			camera.ProcessKeyboard(LEFT, deltaTime);
 		}
 
 		theSun.update(deltaTime);
@@ -245,33 +245,46 @@ void error_callback(int error, const char* description)
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	
+	// misc
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
+		toggleFullscreen(window);
+	}
+
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		terrain.toggleContourStroke();
+
+	// seasons
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
 		terrain.toggleRunThroughSeason();
+
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 		terrain.setSeason(0.5f);
 		terrain.goTowardsSummerSeason();
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
 		terrain.setSeason(0.0f);
 		terrain.goTowardsWinterSeason();
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
 		terrain.setSeason(0.5f);
 		terrain.goTowardsWinterSeason();
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
 		terrain.setSeason(1.0f);
 		terrain.goTowardsSummerSeason();
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
 		terrain.setSeason(1.0f);
 		terrain.goTowardsSummerSeason();
 	}
+
+	// Day and night 
 	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
 		theSun.setTime(DAY, 0.0f);
 	}
@@ -287,9 +300,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
 		theSun.toggleTime();
 	}
-	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
-		toggleFullscreen(window);
+	// Camera
+	if (glfwGetKey(window, GLFW_KEY_SLASH) == GLFW_PRESS) {
+		camera.rotateState();
 	}
+
 }
 
 

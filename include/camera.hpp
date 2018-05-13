@@ -12,7 +12,13 @@ enum Camera_Movement {
 	FORWARD,
 	BACKWARD,
 	LEFT,
-	RIGHT
+	RIGHT,
+	DOWN,
+	UP
+};
+
+enum CameraState {
+	FREEMOVE, LOCK_TO_TARGET, RESTRICTED
 };
 
 // Default camera values
@@ -33,6 +39,7 @@ public:
 	glm::vec3 Up;
 	glm::vec3 Right;
 	glm::vec3 WorldUp;
+	CameraState state;
 	// Euler Angles
 	float Yaw;
 	float Pitch;
@@ -46,7 +53,10 @@ public:
 	// Constructor with scalar values
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
+	// TODO
 	void setPosition(glm::vec3 position);
+
+	void rotateState();
 
 	// Returns the view matrix calculated using Euler Angles and the LookAt Matrix
 	glm::mat4 GetViewMatrix();

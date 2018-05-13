@@ -9,6 +9,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
+	state = FREEMOVE;
 }
 
 // Constructor with scalar values
@@ -20,6 +21,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
+	state = FREEMOVE;
 }
 
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -32,18 +34,56 @@ void Camera::setPosition(glm::vec3 position) {
 	this->Position = position;
 }
 
+void Camera::rotateState() {
+	if (state == FREEMOVE) {
+		state = LOCK_TO_TARGET;
+	}
+	else if (state == LOCK_TO_TARGET) {
+		state = RESTRICTED;
+	}
+	else if (state == RESTRICTED) {
+		state = FREEMOVE;
+	}
+	else state = FREEMOVE;
+}
+
 // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
-	float velocity = MovementSpeed * deltaTime;
-	if (direction == FORWARD)
-		Position += Front * velocity;
-	if (direction == BACKWARD)
-		Position -= Front * velocity;
-	if (direction == LEFT)
-		Position -= Right * velocity;
-	if (direction == RIGHT)
-		Position += Right * velocity;
+	if (state == FREEMOVE) {
+		float velocity = MovementSpeed * deltaTime;
+		if (direction == FORWARD)
+			Position += Front * velocity;
+		else if (direction == BACKWARD)
+			Position -= Front * velocity;
+		else if (direction == LEFT)
+			Position -= Right * velocity;
+		else if (direction == RIGHT)
+			Position += Right * velocity;
+	}
+	else if (state == RESTRICTED) {
+		float velocity = MovementSpeed * deltaTime;
+
+		glm::vec3 x(1, 0, 0);
+		glm::vec3 y(0, 1, 0);
+		glm::vec3 z(0, 0, 1);
+
+		if (direction == FORWARD)
+			Position += x * velocity;
+		else if (direction == BACKWARD)
+			Position -= x * velocity;
+		else if (direction == LEFT)
+			Position -= z * velocity;
+		else if (direction == RIGHT)
+			Position += z * velocity;
+		else if (direction == UP)
+			Position += y * velocity;
+		else if (direction == RIGHT)
+			Position += y * velocity;
+
+	}
+	else {// nothing
+	}
 }
 
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
