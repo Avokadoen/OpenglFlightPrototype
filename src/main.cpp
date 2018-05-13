@@ -54,6 +54,7 @@ Sun theSun;
 // text
 FreeType freeType;
 
+
 int main() {
 
 	if (!glfwInit())
@@ -125,6 +126,7 @@ int main() {
 	Plane plane("assets/model/ask21mi.obj");
 	PlaneInput frameInput;
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
+	plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0));
 
 	
 	
@@ -170,8 +172,16 @@ int main() {
 		}
 		if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
 			frameInput.breakKey = true;
+		}	
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0));
+			plane.rotate(90, glm::vec3(0, 1, 0));
 		}
-	
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+			plane.setPosition(terrain.getRandomValidPos() + glm::vec3(0, 50, 0));
+			plane.rotate(90, glm::vec3(0, 1, 0));
+		}
+
 		// camera
 		if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
 			camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -204,7 +214,7 @@ int main() {
 
 		shader.use();
 		// view/projection transformations
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)*screenWidth / (float)*screenHeight, 0.1f, 10000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);

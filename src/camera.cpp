@@ -9,7 +9,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
-	state = FREEMOVE;
+	state = LOCK_TO_TARGET;
 	targetRotation = glm::mat4(1);
 }
 
@@ -22,7 +22,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
-	state = FREEMOVE;
+	state = LOCK_TO_TARGET;
 	targetRotation = glm::mat4(1);
 }
 

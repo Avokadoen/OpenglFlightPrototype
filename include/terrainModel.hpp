@@ -1,6 +1,7 @@
 #pragma once;
 
 #include <vector>
+#include <random>
 #include "model.hpp"
 #include "stb_image.h"
 
@@ -31,6 +32,7 @@ public:
 
 	std::string getSeasonString();
 	glm::vec3 getActualPos();
+	glm::vec3 getRandomValidPos();
 	float getWidth();
 protected:
 	const int SecondsForAYear = 60;
@@ -101,4 +103,6 @@ private:
 	float seasonModifier;
 	float activeContour;
 	int seasonDirection;
+
+
 };

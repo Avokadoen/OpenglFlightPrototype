@@ -66,3 +66,9 @@ glm::vec3 Plane::getPostion() {
 	glm::decompose(transform, glm::vec3(), glm::quat(), position, glm::vec3(), glm::vec4());
 	return position;
 }
+
+
+void Plane::setPosition(glm::vec3 position) {
+	transform = glm::mat4(1);
+	translate(position);
+}

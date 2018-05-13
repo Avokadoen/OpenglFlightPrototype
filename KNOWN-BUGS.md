@@ -17,9 +17,9 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 ## LEVEL 3:
 
 ## LEVEL 2:
-- Description: Specular output from fragment shader does not work correctly
+- Description: Going from camera::state::LOCK_TO_TARGET to any other state
+				makes camera go back to previous rotation
 - Possible solution:
-- Cause: Seems like something in the shader is 0 and makes all the data 0
-
+- Cause: pitch and yaw stays the same while in camera::state::LOCK_TO_TARGET
 
 ## LEVEL 1:

@@ -22,7 +22,8 @@ public:
 	void update(float deltaTime);
 	void inputHandler(PlaneInput frameInput);
 	glm::vec3 getPostion();
-	glm::vec3 getFront();
+	void setPosition(glm::vec3 position);
+
 private:
 	glm::vec3 velocity;
 	float yaw;

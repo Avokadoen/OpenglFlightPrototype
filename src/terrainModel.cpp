@@ -5,7 +5,6 @@
 #include <algorithm>
 
 
-
 Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight		= maxHeight;
 	this->blockScale	= blockScale;
@@ -17,6 +16,9 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	seasonDirection		= 1;
 	runThroughSeason	= true;
 	activeContour		= 0.0f;
+
+
+
 }
 
 void Terrain::update(float deltaTime) {
@@ -276,6 +278,15 @@ std::string Terrain::getSeasonString() {
 glm::vec3 Terrain::getActualPos() {
 	auto middle = vertices.begin() + ((imageHeight / 2) * imageWidth) + (imageWidth / 2);
 	return middle->Position;
+}
+
+glm::vec3 Terrain::getRandomValidPos() {
+	std::mt19937 rng;
+	rng.seed(std::random_device()());
+	std::uniform_int_distribution<std::mt19937::result_type> dist6((int)(imageWidth * (imageHeight / 5)), 
+																	(int)(imageWidth * (imageHeight / 1)));
+	auto point = vertices.begin() + dist6(rng);
+	return point->Position;
 }
 
 float Terrain::getWidth() {
