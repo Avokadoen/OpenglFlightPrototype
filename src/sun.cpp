@@ -5,7 +5,7 @@ Sun::Sun() {
 	time = DAY;
 	skyColor = DaySkyColor;
 	lerpPos = 0;
-	secondsInADay = 5.0f;
+	secondsInADay = 20.0f;
 	currentLight = Day;
 	timeRunning = true;
 }

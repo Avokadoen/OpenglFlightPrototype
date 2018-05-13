@@ -20,7 +20,7 @@ set( GLFW_BUILD_TESTS OFF CACHE BOOL "turn off tests" FORCE)
 target_include_directories(AkselhjExam_2531
   PRIVATE ${PROJECT_SOURCE_DIR}/include
   PRIVATE ${PROJECT_SOURCE_DIR}/glew-2.1.0/include
-  PRIVATE ${PROJECT_SOURCE_DIR}/freetype-2.9/include
+  PRIVATE ${PROJECT_SOURCE_DIR}/freetype-2.8/include
   PRIVATE ${PROJECT_SOURCE_DIR}/glfw-3.2.1/include
   PRIVATE ${PROJECT_SOURCE_DIR}/glm-0.9.9-a2/glm
   PRIVATE ${PROJECT_SOURCE_DIR}/assimp/include
@@ -29,7 +29,7 @@ target_include_directories(AkselhjExam_2531
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/glfw-3.2.1)
 add_subdirectory(${PROJECT_SOURCE_DIR}/assimp)
-add_subdirectory(${PROJECT_SOURCE_DIR}/freetype-2.9)
+add_subdirectory(${PROJECT_SOURCE_DIR}/freetype-2.8)
 
 set(CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/glew-2.1.0/)
 set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/glew-2.1.0/lib/Release/Win32/)
@@ -44,5 +44,5 @@ target_link_libraries(AkselhjExam_2531
   PRIVATE ${GLEW_LIBRARIES}
   PRIVATE glfw ${GLFW_LIBRARIES}
   PRIVATE ${SOIL_LIBRARY}
-  PRIVATE ${FREETYPE_LIBRARIES}
-  PRIVATE assimp)
+  PRIVATE assimp
+  PRIVATE freetype ${FREETYPE_LIBRARIES})

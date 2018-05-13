@@ -6,9 +6,10 @@
 #include "loadedModel.hpp"
 #include "terrainModel.hpp"
 #include "sun.hpp"
+#include "freetype.hpp"
+
 
 void testLight(Shader& shader) {
-
 	shader.setInt("spotCount", 1);
 	shader.setVec3("spotLight[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	shader.setVec3("spotLight[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -47,6 +48,9 @@ bool lightToggle = false;
 // The world:
 Terrain terrain(70.0f, 2.0f);
 Sun theSun;
+
+// text
+FreeType freeType;
 
 int main() {
 
@@ -105,6 +109,7 @@ int main() {
 
 	glfwSwapInterval(1);
 
+	freeType.init();
 	
 	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));

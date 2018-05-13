@@ -17,9 +17,9 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 ## LEVEL 3:
 
 ## LEVEL 2:
+- Description: Specular output from fragment shader does not work correctly
+- Possible solution:
+- Cause: Seems like something in the shader is 0 and makes all the data 0
+
 
 ## LEVEL 1:
-
-- Description: Season backtracks as it starts to become summer, and then turns to summer again-
-- Possible solution:
-- Cause: Something to do with my if check Terrain::update()
