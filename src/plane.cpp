@@ -28,9 +28,11 @@ void Plane::update(float deltaTime) {
 
 	if (inputBuffer.pitchKey) {
 		rotate(yawSpeed * deltaTime, glm::vec3(0, 0, 1));
+		yaw += yawSpeed * deltaTime;
 	}
 	if (inputBuffer.yawKey) {
 		rotate(-yawSpeed * deltaTime, glm::vec3(0, 0, 1));
+		yaw -= yawSpeed * deltaTime;
 	}
 	if (inputBuffer.leftBarrelRollLey) {
 		rotate(-rollSpeed * deltaTime, glm::vec3(1, 0, 0));
@@ -44,6 +46,12 @@ void Plane::update(float deltaTime) {
 	if (inputBuffer.breakKey) {
 		velocity.x += acceleration * deltaTime;
 	}
+	/*if (yaw < 0) {
+		velocity.x -= acceleration * deltaTime; //* glm::radians(yaw);
+	}
+	if (yaw > 0) {
+		velocity.x += acceleration * deltaTime; //* glm::radians(yaw);
+	}*/
 
 	translate(velocity * deltaTime);
 
@@ -67,8 +75,20 @@ glm::vec3 Plane::getPostion() {
 	return position;
 }
 
-
-void Plane::setPosition(glm::vec3 position) {
+void Plane::setPosition(glm::vec3 position, glm::vec3 lookAtPos) {
 	transform = glm::mat4(1);
 	translate(position);
+	
+	if (position.z > lookAtPos.z) {
+		rotate(180, glm::vec3(0, 1, 0));
+	}
+	else{
+		rotate(-180, glm::vec3(0, 1, 0));
+	}
+
 }
+
+float Plane::cheatGetSpeed() {
+	return velocity.x * -1 * 10;
+}
+

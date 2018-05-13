@@ -20,7 +20,7 @@ enum Camera_Movement {
 };
 
 enum CameraState {
-	FREEMOVE, LOCK_TO_TARGET, RESTRICTED
+	FREEMOVE, LOCK_TO_THIRD_PRS, LOCK_TO_FIRST_PRS, RESTRICTED
 };
 
 // Default camera values

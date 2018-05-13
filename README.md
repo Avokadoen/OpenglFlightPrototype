@@ -29,3 +29,5 @@
 	- Finding up (and therefore also front) vector.
 - https://stackoverflow.com/a/40024726
 	- Using quat in a proper manner after decompose
+- https://stackoverflow.com/a/13445752
+	- Random int values

@@ -9,7 +9,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
-	state = LOCK_TO_TARGET;
+	state = LOCK_TO_THIRD_PRS;
 	targetRotation = glm::mat4(1);
 }
 
@@ -22,7 +22,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
-	state = LOCK_TO_TARGET;
+	state = LOCK_TO_THIRD_PRS;
 	targetRotation = glm::mat4(1);
 }
 
@@ -35,9 +35,12 @@ glm::mat4 Camera::GetViewMatrix()
 
 void Camera::rotateState() {
 	if (state == FREEMOVE) {
-		state = LOCK_TO_TARGET;
+		state = LOCK_TO_THIRD_PRS;
 	}
-	else if (state == LOCK_TO_TARGET) {
+	else if (state == LOCK_TO_THIRD_PRS) {
+		state = LOCK_TO_FIRST_PRS;
+	}
+	else if (state == LOCK_TO_FIRST_PRS) {
 		state = RESTRICTED;
 	}
 	else if (state == RESTRICTED) {
@@ -47,7 +50,7 @@ void Camera::rotateState() {
 }
 
 void Camera::update(glm::mat4 transform) {
-	if (state == LOCK_TO_TARGET) {
+	if (state == LOCK_TO_THIRD_PRS || state == LOCK_TO_FIRST_PRS) {
 		glm::quat rotation;
 		glm::vec3 position;
 		glm::decompose(transform, glm::vec3(), rotation, position, glm::vec3(), glm::vec4());
@@ -57,7 +60,10 @@ void Camera::update(glm::mat4 transform) {
 
 		updateCameraVectors();
 
-		Position = position - Front * 30.0f + Up * 5.0f;
+		if(state == LOCK_TO_THIRD_PRS)
+			Position = position - Front * 30.0f + Up * 5.0f;
+		else if(state == LOCK_TO_FIRST_PRS)
+			Position = position + Front * 2.1f - Up * 0.1f;
 	}
 }
 
@@ -138,7 +144,14 @@ void Camera::ProcessMouseScroll(float yoffset)
 // Calculates the front vector from the Camera's (updated) Euler Angles
 void Camera::updateCameraVectors()
 {
-	if (state != LOCK_TO_TARGET) {
+	if (state == LOCK_TO_THIRD_PRS || state == LOCK_TO_FIRST_PRS){
+		glm::vec3 up = glm::vec3(0, 1, 0);
+		Up = glm::normalize(glm::cross(up, targetRotation));
+
+		glm::vec3 front = glm::vec3(-1, 0, 0);
+		Front = glm::normalize(glm::cross(front, targetRotation));
+	}
+	else {
 		// Calculate the new Front vector
 		glm::vec3 front;
 		front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
@@ -149,11 +162,5 @@ void Camera::updateCameraVectors()
 		Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 		Up = glm::normalize(glm::cross(Right, Front));
 	}
-	else {
-		glm::vec3 up = glm::vec3(0, 1, 0);
-		Up = glm::normalize(glm::cross(up, targetRotation));
-
-		glm::vec3 front = glm::vec3(-1, 0, 0);
-		Front = glm::normalize(glm::cross(front, targetRotation));
-	}
+	
 }

@@ -126,8 +126,8 @@ int main() {
 	Plane plane("assets/model/ask21mi.obj");
 	PlaneInput frameInput;
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
-	plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0));
-
+	plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0), terrain.getActualPos() + glm::vec3(20, 50, 0));
+	plane.rotate(90, glm::vec3(0, 1, 0));
 	
 	
 	float lastFrame = 0;
@@ -174,11 +174,11 @@ int main() {
 			frameInput.breakKey = true;
 		}	
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-			plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0));
+			plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0), terrain.getActualPos() + glm::vec3(20, 50, 0));
 			plane.rotate(90, glm::vec3(0, 1, 0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-			plane.setPosition(terrain.getRandomValidPos() + glm::vec3(0, 50, 0));
+			plane.setPosition(terrain.getRandomValidPos() + glm::vec3(0, 50, 0), terrain.getActualPos() + glm::vec3(0, 50, 0));
 			plane.rotate(90, glm::vec3(0, 1, 0));
 		}
 
@@ -235,7 +235,8 @@ int main() {
 		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100 - 10, (*screenHeight) * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
 		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
 		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70 - 10, (*screenHeight) * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
-	
+		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100, (*screenHeight)  * 0.10, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100 - 10, (*screenHeight) * 0.10, 1.1f, glm::vec3(0.0, 0.0, 0.0));
 
 		glfwSwapBuffers(window);
 	
