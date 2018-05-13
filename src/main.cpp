@@ -17,7 +17,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 800;
 
 // screen
@@ -163,9 +163,9 @@ int main() {
 
 		textShader.use();
 		freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		//freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100 - 10, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
-		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.75, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		//freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.75, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+		freeType.RenderText(textShader, terrain.getSeasonString(), screenWidth / 100 - 10, screenHeight * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
+		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.70, screenHeight * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+		freeType.RenderText(textShader, theSun.getTimeString(), screenWidth * 0.70 - 10, screenHeight * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
 	
 
 		glfwSwapBuffers(window);

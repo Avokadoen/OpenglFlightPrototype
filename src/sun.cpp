@@ -11,55 +11,56 @@ Sun::Sun() {
 }
 
 void Sun::update(float deltaTime) {
-	if (timeRunning) {
-		if (time == DAY) {
-			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Day, Noon, lerpPos);
-				skyColor = lerpVec(DaySkyColor, NoonSkyColor, lerpPos);
-				lerpPos += deltaTime / secondsInADay;
-			}
-			else {
-				time = NOON;
-				lerpPos = 0;
-			}
-		}
+	if (!timeRunning) deltaTime = 0;
 
-		if (time == NOON) {
-			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Noon, Night, lerpPos);
-				skyColor = lerpVec(NoonSkyColor, NightSkyColor, lerpPos);
-				lerpPos += deltaTime / secondsInADay;
-			}
-			else {
-				time = NIGHT;
-				lerpPos = 0;
-			}
+	if (time == DAY) {
+		if (lerpPos < 1.0f) {
+			currentLight = lerpDirLight(Day, Noon, lerpPos);
+			skyColor = lerpVec(DaySkyColor, NoonSkyColor, lerpPos);
+			lerpPos += deltaTime / secondsInADay;
 		}
-
-		if (time == NIGHT) {
-			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Night, Morning, lerpPos);
-				skyColor = lerpVec(NightSkyColor, MorningSkyColor, lerpPos);
-				lerpPos += deltaTime / secondsInADay;
-			}
-			else {
-				time = MORNING;
-				lerpPos = 0;
-			}
-		}
-
-		if (time == MORNING) {
-			if (lerpPos < 1.0f) {
-				currentLight = lerpDirLight(Morning, Day, lerpPos);
-				skyColor = lerpVec(MorningSkyColor, DaySkyColor, lerpPos);
-				lerpPos += deltaTime / secondsInADay;
-			}
-			else {
-				time = DAY;
-				lerpPos = 0;
-			}
+		else {
+			time = NOON;
+			lerpPos = 0;
 		}
 	}
+
+	if (time == NOON) {
+		if (lerpPos < 1.0f) {
+			currentLight = lerpDirLight(Noon, Night, lerpPos);
+			skyColor = lerpVec(NoonSkyColor, NightSkyColor, lerpPos);
+			lerpPos += deltaTime / secondsInADay;
+		}
+		else {
+			time = NIGHT;
+			lerpPos = 0;
+		}
+	}
+
+	if (time == NIGHT) {
+		if (lerpPos < 1.0f) {
+			currentLight = lerpDirLight(Night, Morning, lerpPos);
+			skyColor = lerpVec(NightSkyColor, MorningSkyColor, lerpPos);
+			lerpPos += deltaTime / secondsInADay;
+		}
+		else {
+			time = MORNING;
+			lerpPos = 0;
+		}
+	}
+
+	if (time == MORNING) {
+		if (lerpPos < 1.0f) {
+			currentLight = lerpDirLight(Morning, Day, lerpPos);
+			skyColor = lerpVec(MorningSkyColor, DaySkyColor, lerpPos);
+			lerpPos += deltaTime / secondsInADay;
+		}
+		else {
+			time = DAY;
+			lerpPos = 0;
+		}
+	}
+	
 }
 
 void Sun::syncWithShader(Shader shader) {

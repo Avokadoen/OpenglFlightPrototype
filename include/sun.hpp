@@ -39,7 +39,7 @@ private:
 	const glm::vec3 MorningSkyColor = glm::vec3(0.3, 0.1, 0.01);
 
 	const DirLight Day{
-		glm::vec3(0.0, -0.9, 0.1),
+		glm::vec3(0.2, -0.7, 0.1),
 		glm::vec3(0.1, 0.1, 0.1),
 		glm::vec3(0.5, 0.5, 0.5),
 		glm::vec3(0.5, 0.5, 0.5) 
