@@ -210,18 +210,10 @@ int main() {
 		glClearColor(skyColor.x, skyColor.y, skyColor.z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
-		shader.use();
-		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)*screenWidth / (float)*screenHeight, 0.1f, 10000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-	
-		plane.Draw(shader);
-
 		terrainShader.use();
+
 		terrainShader.setMat4("projection", projection);
 		terrainShader.setMat4("view", view);
 		terrainShader.setVec3("lightPos", camera.Position);
@@ -237,6 +229,14 @@ int main() {
 		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70 - 10, (*screenHeight) * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
 		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100, (*screenHeight)  * 0.10, 1.0f, glm::vec3(1.0, 1.0, 1.0));
 		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100 - 10, (*screenHeight) * 0.10, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+
+		shader.use();
+		// view/projection transformations
+	
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
+
+		plane.Draw(shader);
 
 		glfwSwapBuffers(window);
 	

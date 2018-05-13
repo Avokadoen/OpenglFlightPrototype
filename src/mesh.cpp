@@ -9,11 +9,12 @@ Material::Material() {
 }
 
 Material::Material(glm::vec3 ambient, glm::vec3 diffuse,
-	glm::vec3 specular, float shininess) {
+	glm::vec3 specular, float shininess, float opacity) {
 	this->ambient	= ambient;
 	this->diffuse	= diffuse;
 	this->specular	= specular;
 	this->shininess = shininess;
+	this->opacity	= opacity;
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material material)
@@ -112,6 +113,7 @@ void Mesh::Draw(Shader shader)
 	shader.setVec3("material.diffuse", material.diffuse);
 	shader.setVec3("material.specular", material.specular);
 	shader.setFloat("material.shininess", material.shininess);
+	shader.setFloat("material.opacity", material.opacity);
 
 	// draw mesh
 	glBindVertexArray(VAO);

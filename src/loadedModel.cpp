@@ -131,6 +131,7 @@ Mesh LoadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 	material->Get(AI_MATKEY_COLOR_DIFFUSE, meshMaterial.diffuse[0]);
 	material->Get(AI_MATKEY_COLOR_SPECULAR, meshMaterial.specular[0]);
 	material->Get(AI_MATKEY_SHININESS, meshMaterial.shininess);
+	material->Get(AI_MATKEY_OPACITY, meshMaterial.opacity);
 	// return a mesh object created from the extracted mesh data
 	return Mesh(vertices, indices, textures, meshMaterial);
 }

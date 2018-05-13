@@ -58,6 +58,13 @@ void Plane::update(float deltaTime) {
 	inputBuffer.reset();
 }
 
+void Plane::Draw(Shader shader){
+	glEnable(GL_BLEND);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+	Model::Draw(shader);
+	//glDisable(GL_BLEND);
+}
+
 void Plane::inputHandler(PlaneInput frameInput) {
 
 	inputBuffer.pitchKey			= (inputBuffer.pitchKey				|| frameInput.pitchKey);
