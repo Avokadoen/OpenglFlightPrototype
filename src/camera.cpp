@@ -22,6 +22,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Pitch = pitch;
 	updateCameraVectors();
 	state = FREEMOVE;
+	targetRotation = glm::mat4(1);
 }
 
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
