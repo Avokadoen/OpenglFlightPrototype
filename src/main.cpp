@@ -7,6 +7,7 @@
 #include "terrainModel.hpp"
 #include "sun.hpp"
 #include "freetype.hpp"
+#include "plane.hpp"
 
 #include <memory>
 
@@ -110,17 +111,22 @@ int main() {
 
 	glfwSwapInterval(1);
 
+	// text init
 	freeType.loadFont(SCR_WIDTH, SCR_HEIGHT);
 	freeType.setOrthoRange(SCR_WIDTH, SCR_HEIGHT);
 	Shader textShader("shaders/freetype.vert", "shaders/freetype.frag");
 
-	
-	terrain.loadHeightMapData("assets/heightmap/height50.png");
+	// terrain init
+	terrain.loadHeightMapData("assets/heightmap/height100.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
-	LoadedModel plane("assets/model/ask21mi.obj");
-
-	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
+
+	// plane init
+	Plane plane("assets/model/ask21mi.obj");
+	PlaneInput frameInput;
+	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
+
+	
 	
 	float lastFrame = 0;
 
@@ -142,9 +148,54 @@ int main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		// deal with input
+		glfwPollEvents();
+
+		frameInput.reset();
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+			frameInput.pitchKey = true;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+			frameInput.yawKey = true;
+			//camera.ProcessKeyboard(BACKWARD, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+			frameInput.rightBarrelRollKey = true;
+			//camera.ProcessKeyboard(LEFT, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+			frameInput.leftBarrelRollLey = true;
+			//camera.ProcessKeyboard(RIGHT, deltaTime);
+		}
+		/*if (glfwGetKey(window, GLFW_KEY_) == GLFW_PRESS) {
+		frameInput.leftBarrelRollLey = true;
+		//camera.ProcessKeyboard(RIGHT, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		frameInput.leftBarrelRollLey = true;
+		//camera.ProcessKeyboard(RIGHT, deltaTime);
+		}*/
+
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+			camera.ProcessKeyboard(FORWARD, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+			camera.ProcessKeyboard(BACKWARD, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+			camera.ProcessKeyboard(LEFT, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+			camera.ProcessKeyboard(RIGHT, deltaTime);
+		}
+
 		theSun.update(deltaTime);
 		theSun.syncWithShader(shader);
 		theSun.syncWithShader(terrainShader);
+
+		plane.inputHandler(frameInput);
+		plane.update(deltaTime);
+
 		// render
 		// ------
 		glm::vec3 skyColor = theSun.getSkyColor();
@@ -179,16 +230,8 @@ int main() {
 	
 
 		glfwSwapBuffers(window);
-		glfwPollEvents();
-
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			camera.ProcessKeyboard(FORWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			camera.ProcessKeyboard(BACKWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			camera.ProcessKeyboard(LEFT, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			camera.ProcessKeyboard(RIGHT, deltaTime);
+	
+			
 		
 	}
 
