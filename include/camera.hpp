@@ -42,7 +42,7 @@ public:
 	glm::vec3 Right;
 	glm::vec3 WorldUp;
 	CameraState state;
-	glm::mat4 targetRotation;
+	glm::quat targetRotation;
 	// Euler Angles
 	float Yaw;
 	float Pitch;

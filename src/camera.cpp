@@ -10,6 +10,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 	Pitch = pitch;
 	updateCameraVectors();
 	state = FREEMOVE;
+	targetRotation = glm::mat4(1);
 }
 
 // Constructor with scalar values
@@ -51,10 +52,12 @@ void Camera::update(glm::mat4 transform) {
 		glm::vec3 position;
 		glm::decompose(transform, glm::vec3(), rotation, position, glm::vec3(), glm::vec4());
 
-		Position = position;
-		targetRotation = glm::toMat4(rotation);
+
+		targetRotation = glm::conjugate(rotation);;
 
 		updateCameraVectors();
+
+		Position = position - Front * 30.0f + Up * 5.0f;
 	}
 }
 
@@ -100,7 +103,6 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
 {
-	if (state != LOCK_TO_TARGET) {
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
 
@@ -118,7 +120,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
 
 		// Update Front, Right and Up Vectors using the updated Euler angles
 		updateCameraVectors();
-	}
+
 }
 
 
@@ -149,9 +151,9 @@ void Camera::updateCameraVectors()
 	}
 	else {
 		glm::vec3 up = glm::vec3(0, 1, 0);
-		Up = glm::normalize(glm::vec4(up, 1) * targetRotation);
+		Up = glm::normalize(glm::cross(up, targetRotation));
 
 		glm::vec3 front = glm::vec3(-1, 0, 0);
-		Front = glm::normalize(glm::vec4(front, 1) * targetRotation);
+		Front = glm::normalize(glm::cross(front, targetRotation));
 	}
 }
