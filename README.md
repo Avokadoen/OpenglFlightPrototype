@@ -19,7 +19,7 @@
 ### [Known-Bugs List](KNOWN-BUGS.md)
 
 ### keybindings
-<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" >
+<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" />
 ##### Description:
 - Color coding:
 	- Green: 	season
