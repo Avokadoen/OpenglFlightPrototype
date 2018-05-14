@@ -15,3 +15,4 @@
 - first person cockpit
 - toggle of fullscreen
 - toggle of HUD
+- fake skybox that change with day night cycle using glCLearColor
