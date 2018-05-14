@@ -30,45 +30,45 @@
 	- Red:		Camera controls
 	- Orange:	Utility
 - Seasons:
-	- 1 makes it spring
-	- 2 makes it summe
-	- 3 makes it autumn
-	- 4 makes it winter
-	- 5 stops progress of months
+	- **1** makes it spring
+	- **2** makes it summer
+	- **3** makes it autumn
+	- **4** makes it winter
+	- **5** stops progress of months
 - Day/night cycle
-	- 6 set time to 1200, day
-	- 7 set time to 1800, noon
-	- 8 set time to 0000, night
-	- 9 set time to 0600, morning
-	- 0 stops progress of clock
+	- **6** set time to 1200, day
+	- **7** set time to 1800, noon
+	- **8** set time to 0000, night
+	- **9** set time to 0600, morning
+	- **0** stops progress of clock
 - Air plane:
-	- w and s controls yaw, while a and d controls pitch
-	- ',' reduce speed. There is no minimum speed
-	- '.' increase speed. There is no maximum speed
+	- **W** and **S** controls yaw, while **A** and **D** controls pitch
+	- **,** reduce speed. There is no minimum speed
+	- **.** increase speed. There is no maximum speed
 - Debug:
-	- R resets plane position
-	- F randoms plane position within the map
-	- O toggle contour stroke
+	- **R** resets plane position
+	- **F** randoms plane position within the map
+	- **O** toggle contour stroke
 - Camera controls
-	- '-' change camera state and how input effects the camera:
+	- **-** change camera state and how input effects the camera:
 		- LOCK_TO_THIRD_PRS
 			- none
 		- LOCK_TO_FIRST_PRS
 			- none
 		- RESTRICTED
-			- i adds to your x, k subtracts from it
-			- l adds to your z, j subtracts from it
-			- y adds to your y, h subtracts from it
-			- mouse to look around
+			- **I** adds to your x, **K** subtracts from it
+			- **L** adds to your z, **J** subtracts from it
+			- **Y** adds to your y, **H** subtracts from it
+			- **mouse** to look around
 		- FREEMOVE
-			- i moves you forward relative to your orientation
-			- k moves you backwards relative to your orientation
-			- j moves you left relative to your orientation
-			- l moves you right relative to your orientation
-			- mouse to look around
+			- **I** moves you forward relative to your orientation
+			- **K** moves you backwards relative to your orientation
+			- **J** moves you left relative to your orientation
+			- **L** moves you right relative to your orientation
+			- **mouse** to look around
 - Utility
-	- f2 toggle between fullscreen and windowed. Going to fullscreen will save the screen state and apply it when going back to windowed
-	- esc will exit the program
+	- **f2** toggle between fullscreen and windowed. Going to fullscreen will save the screen state and apply it when going back to windowed
+	- **esc** will exit the program
 
 ##### Some sources:
 - https://learnopengl.com/
@@ -87,6 +87,8 @@
 	- Random int values
 - https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
 	- Lerp
+- https://learnopengl.com/Advanced-OpenGL/Blending
+	- Blending basics
 - ##### All lighting
 - https://learnopengl.com/Lighting/Materials
 - https://learnopengl.com/Lighting/Basic-Lighting
