@@ -47,6 +47,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 bool lightToggle = false;
+bool writeHud = true;
 
 // The world:
 Terrain terrain(200.0f, 1.3f);
@@ -242,18 +243,17 @@ int main() {
 		tree.Draw(shader);
 		plane.Draw(shader);
 
-		textShader.use();
-		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100 - 10, (*screenHeight) * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
-		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70 - 10, (*screenHeight) * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
-		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100, (*screenHeight)  * 0.10, 1.0f, glm::vec3(1.0, 1.0, 1.0));
-		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100 - 10, (*screenHeight) * 0.10, 1.1f, glm::vec3(0.0, 0.0, 0.0));
-
-
-		glfwSwapBuffers(window);
-	
-			
+		if (writeHud) {
+			textShader.use();
+			freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+			freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100 - 10, (*screenHeight) * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
+			freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+			freeType.RenderText(textShader, theSun.getTimeString(), (*screenWidth) * 0.70 - 10, (*screenHeight) * 0.92, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+			freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100, (*screenHeight)  * 0.10, 1.0f, glm::vec3(1.0, 1.0, 1.0));
+			freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100 - 10, (*screenHeight) * 0.10, 1.1f, glm::vec3(0.0, 0.0, 0.0));
+		}
+		
+		glfwSwapBuffers(window);	
 		
 	}
 
@@ -330,6 +330,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		camera.rotateState();
 	}
 
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+		writeHud = !writeHud;
+	}
 }
 
 

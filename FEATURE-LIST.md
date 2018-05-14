@@ -13,3 +13,5 @@
 - controllable airplane
 - respawn of airplane, either randomly or in the center of the map
 - first person cockpit
+- toggle of fullscreen
+- toggle of HUD

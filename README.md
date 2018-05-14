@@ -53,6 +53,7 @@
 	- **R** resets plane position
 	- **F** randoms plane position within the map
 	- **O** toggle contour stroke
+	- **T** toggle HUD
 - Camera controls
 	- **-** change camera state and how input effects the camera:
 		- LOCK_TO_THIRD_PRS
