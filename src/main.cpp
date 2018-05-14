@@ -197,6 +197,12 @@ int main() {
 		if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
 			camera.ProcessKeyboard(LEFT, deltaTime);
 		}
+		if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
+			camera.ProcessKeyboard(UP, deltaTime);
+		}
+		if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+			camera.ProcessKeyboard(DOWN, deltaTime);
+		}
 
 		theSun.update(deltaTime);
 		theSun.syncWithShader(shader);

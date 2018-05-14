@@ -1,20 +1,25 @@
 
 # Graphics height map
 
-
-
 ## Author
 - [Akselhj, Aksel Hjerpbakk](https://github.com/Avokadoen) (997816)
 
 
 ### To build the project (windows only for now):
--
+- Simply open visual studio
+- Select either debug or release
+- Choose build at the upper part of the fullscreen
+
+- You can also download the prebuilt version "buildedGame.rar" from the repo
 
 ### [Project Report (not made yet)]()
 
 ### [To-Do List](TODO-LIST.md)
 
 ### [Known-Bugs List](KNOWN-BUGS.md)
+
+src="" height="300" width="540"
+
 
 ##### Some sources:
 - https://learnopengl.com/
