@@ -32,6 +32,9 @@ public:
 	glm::vec3 getActualPos();
 	glm::vec3 getRandomValidPos();
 
+	glm::vec3 getRandomTreeValidPos();
+	std::vector<glm::mat4> Terrain::generateTreeTransforms(int amount);
+
 protected:
 	const int SecondsForAYear = 60;
 	const float contourStroke = 0.002f;

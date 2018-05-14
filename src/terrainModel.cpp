@@ -285,3 +285,28 @@ glm::vec3 Terrain::getRandomValidPos() {
 	auto point = vertices.begin() + dist6(rng);
 	return point->Position;
 }
+
+glm::vec3 Terrain::getRandomTreeValidPos() {
+
+	std::mt19937 rng;
+	rng.seed(std::random_device()());
+	std::uniform_int_distribution<std::mt19937::result_type> dist6((int)(imageWidth * (imageHeight / 5)),
+		(int)(imageWidth * (imageHeight / 1)));
+
+	while (true) {
+		auto point = vertices.begin() + dist6(rng);
+		if (point->Position.y/maxHeight >= SummerGrassBottom && point->Position.y / maxHeight <= SummerMudBottom * 0.8f)
+			return point->Position + glm::vec3(0, 2, 0);
+	}
+	
+
+}
+
+std::vector<glm::mat4> Terrain::generateTreeTransforms(int amount) {
+	std::vector<glm::mat4> transforms;
+
+	for (int i = 0; i < amount; i++) {
+		transforms.push_back(glm::translate(glm::mat4(1),getRandomTreeValidPos()));
+	}
+	return transforms;
+}

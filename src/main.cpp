@@ -8,6 +8,7 @@
 #include "sun.hpp"
 #include "freetype.hpp"
 #include "plane.hpp"
+#include "tree.hpp"
 
 #include <memory>
 
@@ -53,6 +54,8 @@ Sun theSun;
 
 // text
 FreeType freeType;
+
+
 
 
 int main() {
@@ -130,6 +133,9 @@ int main() {
 	Shader shader("shaders/loadedModel.vert", "shaders/loadedModel.frag");
 	plane.setPosition(terrain.getActualPos() + glm::vec3(0, 50, 0), terrain.getActualPos() + glm::vec3(20, 50, 0));
 	plane.rotate(90, glm::vec3(0, 1, 0));
+	
+	// tree init
+	Tree tree("assets/model/lowpolytree.obj", terrain.generateTreeTransforms(4000));
 	
 	
 	float lastFrame = 0;
@@ -229,11 +235,11 @@ int main() {
 		terrain.Draw(terrainShader);
 		terrain.update(deltaTime);
 		terrain.bindMaterialsToShader(terrainShader);
-
 	
 		shader.use();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
+		tree.Draw(shader);
 		plane.Draw(shader);
 
 		textShader.use();

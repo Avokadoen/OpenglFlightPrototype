@@ -7,15 +7,20 @@
 
 
 ### To build the project (windows only for now):
-- Simply open visual studio
-- Select either debug or release
-- Choose build at the upper part of the fullscreen
+- simply cmake from repo directory (configure, generate)
+- open visual studio
+- right click on solution and click properties
+- select single start up and select "AkselhjExam_2531"
+- select either debug or release from the drop down menu on the top of the screen
+- choose build at the upper part of the fullscreen
 
 - You can also download the prebuilt version "builtGame.rar" from the repo
 
 ### [To-Do List](TODO-LIST.md)
 
 ### [Known-Bugs List](KNOWN-BUGS.md)
+
+### Feature list
 
 ### keybindings
 <img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" />
