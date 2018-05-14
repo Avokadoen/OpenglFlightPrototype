@@ -27,3 +27,23 @@ void Model::scale(glm::vec3 scale) {
 void Model::scale(float scale) {
 	transform = glm::scale(transform, glm::vec3(scale, scale, scale));
 }
+
+/*	
+	"Hacked" function for correcting blending. only partially works
+	Ment to correct vector so that transparent object are drawn
+	last. Does not account for distance from view.
+*/
+void Model::correctDrawOrder() {
+	int index = 0;
+	int rotateCount = 0;
+	for(auto mesh : meshes){
+		if (mesh.material.opacity < 1.0f) {
+			auto it = meshes.begin() + index;
+			std::rotate(it, it + 1, meshes.end() - rotateCount);
+			rotateCount++;
+		}
+		index++;
+		if (index + rotateCount >= meshes.size()) break;
+	}
+
+}

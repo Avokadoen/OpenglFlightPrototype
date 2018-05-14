@@ -42,10 +42,14 @@ public:
 	glm::vec3 Right;
 	glm::vec3 WorldUp;
 	CameraState state;
+	
+	// Target roati
 	glm::quat targetRotation;
+
 	// Euler Angles
 	float Yaw;
 	float Pitch;
+
 	// Camera options
 	float MovementSpeed;
 	float MouseSensitivity;

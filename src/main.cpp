@@ -105,11 +105,13 @@ int main() {
 		glfwTerminate();
 	}
 	
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
+	// vsync
 	glfwSwapInterval(1);
 
 	// text init
@@ -222,6 +224,12 @@ int main() {
 		terrain.update(deltaTime);
 		terrain.bindMaterialsToShader(terrainShader);
 
+	
+		shader.use();
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
+		plane.Draw(shader);
+
 		textShader.use();
 		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100, (*screenHeight) * 0.92, 1.0f, glm::vec3(1.0, 1.0, 1.0));
 		freeType.RenderText(textShader, terrain.getSeasonString(), (*screenWidth) / 100 - 10, (*screenHeight) * 0.92, 1.2f, glm::vec3(0.0, 0.0, 0.0));
@@ -230,13 +238,6 @@ int main() {
 		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100, (*screenHeight)  * 0.10, 1.0f, glm::vec3(1.0, 1.0, 1.0));
 		freeType.RenderText(textShader, std::to_string((int)plane.cheatGetSpeed()) + " km/h", (*screenWidth) / 100 - 10, (*screenHeight) * 0.10, 1.1f, glm::vec3(0.0, 0.0, 0.0));
 
-		shader.use();
-		// view/projection transformations
-	
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-
-		plane.Draw(shader);
 
 		glfwSwapBuffers(window);
 	
@@ -388,7 +389,7 @@ void toggleFullscreen(GLFWwindow* window) {
 		// get reolution of monitor
 		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-		// swithc to full screen
+		// switch to full screen	
 		glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, 0);
 		glfwSwapInterval(1);
 		isFullScreen = true;

@@ -37,6 +37,8 @@ void LoadedModel::loadModel(std::string path)
 	directory = path.substr(0, path.find_last_of('/'));
 
 	processNode(scene->mRootNode, scene);
+
+	correctDrawOrder();
 }
 
 
@@ -125,13 +127,14 @@ Mesh LoadedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	// Retrieve material data incase it doesn't use textures
+	// Retrieve material data 
 	Material meshMaterial;
 	material->Get(AI_MATKEY_COLOR_AMBIENT, meshMaterial.ambient[0]);
 	material->Get(AI_MATKEY_COLOR_DIFFUSE, meshMaterial.diffuse[0]);
 	material->Get(AI_MATKEY_COLOR_SPECULAR, meshMaterial.specular[0]);
 	material->Get(AI_MATKEY_SHININESS, meshMaterial.shininess);
 	material->Get(AI_MATKEY_OPACITY, meshMaterial.opacity);
+
 	// return a mesh object created from the extracted mesh data
 	return Mesh(vertices, indices, textures, meshMaterial);
 }

@@ -19,13 +19,14 @@ Plane::Plane(char* path, glm::vec3 velocity,
 	this->yawSpeed		= yawSpeed;
 	this->rollSpeed		= rollSpeed;
 	this->acceleration	= acceleration;
-	float yaw = 0.0f;
-	float pitch = 0.0f;
+	float yaw			= 0.0f;
+	float pitch			= 0.0f;
 
 }
 
 void Plane::update(float deltaTime) {
-
+	
+	// Deal with input
 	if (inputBuffer.pitchKey) {
 		rotate(yawSpeed * deltaTime, glm::vec3(0, 0, 1));
 		yaw += yawSpeed * deltaTime;
@@ -46,27 +47,21 @@ void Plane::update(float deltaTime) {
 	if (inputBuffer.breakKey) {
 		velocity.x += acceleration * deltaTime;
 	}
-	/*if (yaw < 0) {
-		velocity.x -= acceleration * deltaTime; //* glm::radians(yaw);
-	}
-	if (yaw > 0) {
-		velocity.x += acceleration * deltaTime; //* glm::radians(yaw);
-	}*/
 
 	translate(velocity * deltaTime);
 
+	// throw input
 	inputBuffer.reset();
 }
 
 void Plane::Draw(Shader shader){
-	glEnable(GL_BLEND);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 	Model::Draw(shader);
-	//glDisable(GL_BLEND);
+
 }
 
 void Plane::inputHandler(PlaneInput frameInput) {
 
+	// register input to be dealt with later
 	inputBuffer.pitchKey			= (inputBuffer.pitchKey				|| frameInput.pitchKey);
 	inputBuffer.yawKey				= (inputBuffer.yawKey				|| frameInput.yawKey);
 	inputBuffer.leftBarrelRollLey	= (inputBuffer.leftBarrelRollLey	|| frameInput.leftBarrelRollLey);
@@ -77,11 +72,14 @@ void Plane::inputHandler(PlaneInput frameInput) {
 }
 
 glm::vec3 Plane::getPostion() {
+
+	// extract position from transform
 	glm::vec3 position;
 	glm::decompose(transform, glm::vec3(), glm::quat(), position, glm::vec3(), glm::vec4());
 	return position;
 }
 
+// set position by reseting transform on rotate towards center
 void Plane::setPosition(glm::vec3 position, glm::vec3 lookAtPos) {
 	transform = glm::mat4(1);
 	translate(position);
@@ -95,6 +93,7 @@ void Plane::setPosition(glm::vec3 position, glm::vec3 lookAtPos) {
 
 }
 
+// get velocity.x as it is the only velocity instead of a magnitude of velocity.
 float Plane::cheatGetSpeed() {
 	return velocity.x * -1 * 10;
 }

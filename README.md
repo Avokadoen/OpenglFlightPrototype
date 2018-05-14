@@ -31,3 +31,5 @@
 	- Using quat in a proper manner after decompose
 - https://stackoverflow.com/a/13445752
 	- Random int values
+- https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
+	- Lerp

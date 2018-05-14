@@ -32,7 +32,6 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(Position, Position + Front, Up);
 }
 
-
 void Camera::rotateState() {
 	if (state == FREEMOVE) {
 		state = LOCK_TO_THIRD_PRS;
@@ -51,12 +50,17 @@ void Camera::rotateState() {
 
 void Camera::update(glm::mat4 transform) {
 	if (state == LOCK_TO_THIRD_PRS || state == LOCK_TO_FIRST_PRS) {
+
+		// extract data about target
 		glm::quat rotation;
 		glm::vec3 position;
 		glm::decompose(transform, glm::vec3(), rotation, position, glm::vec3(), glm::vec4());
 
-
-		targetRotation = glm::conjugate(rotation);;
+		// Honestly no idea what this does but it allows the quaternien to transform(rotate) 
+		// vector with common linear algebra. As i understand it, it's a type of normalization
+		// and we get the local-space values we need to isolate the rotation. (going from origin 
+		// rotation to point rotation (?)) 
+		targetRotation = glm::conjugate(rotation);
 
 		updateCameraVectors();
 
@@ -145,6 +149,7 @@ void Camera::ProcessMouseScroll(float yoffset)
 void Camera::updateCameraVectors()
 {
 	if (state == LOCK_TO_THIRD_PRS || state == LOCK_TO_FIRST_PRS){
+		// find the local up and front vector to target so that we can lock to it
 		glm::vec3 up = glm::vec3(0, 1, 0);
 		Up = glm::normalize(glm::cross(up, targetRotation));
 

@@ -18,8 +18,6 @@ struct Character {
 	GLuint     Advance;    // Offset to advance to next glyph
 };
 
-
-
 class FreeType {
 public:
 	FreeType();

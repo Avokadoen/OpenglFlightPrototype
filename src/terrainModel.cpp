@@ -9,15 +9,12 @@ Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight		= maxHeight;
 	this->blockScale	= blockScale;
 	yOffset				= 0.0f;
-	highestPoint		= 0;
 	yScale				= 1.0f;
 	lerpRange			= 0.05f;
 	seasonModifier		= 0.0f;
 	seasonDirection		= 1;
 	runThroughSeason	= true;
 	activeContour		= 0.0f;
-
-
 
 }
 
@@ -94,30 +91,25 @@ float Terrain::GetHeightValue(const unsigned char* data)
 
 bool Terrain::loadHeightMapData(const char *path)
 {
-
+	
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
+	// load the image data from file
 	imageData = stbi_load(path, &imageWidth, &imageHeight, &nrComponents, 0);
-
-
 	if(!imageData)
 	{
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(imageData);
 		return false;
 	}
+
+	// generate height values from texture
 	if (!generateHeightValues()) {
 		std::cout << "failed to generate height map" << std::endl;
 		return false;
 	}
-	//imageData = data;
-	for (auto point : heightValues) {
-		if (highestPoint < point) {
-			highestPoint = point;
-		}
-	}
-	
+
 	return true;
 }
 

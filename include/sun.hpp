@@ -11,6 +11,7 @@ struct DirLight {
 
 enum TimeOfTheDay {DAY, NOON, NIGHT, MORNING};
 
+// encapsulation of dirlight to simulate the sun.
 class Sun {
 public:
 	Sun();
@@ -56,7 +57,7 @@ private:
 		glm::vec3(0.0, -0.1, 0.2),
 		glm::vec3(0),
 		glm::vec3(0.05, 0.05, 0.05),
-		glm::vec3(0.4, 0.4, 0.4)
+		glm::vec3(0.1, 0.1, 0.1)
 	};
 
 		const DirLight Morning{

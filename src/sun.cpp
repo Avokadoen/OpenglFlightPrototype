@@ -2,14 +2,16 @@
 #include "sun.hpp"
 
 Sun::Sun() {
-	time = DAY;
-	skyColor = DaySkyColor;
-	lerpPos = 0;
-	secondsInADay = 20.0f;
-	currentLight = Day;
-	timeRunning = true;
+	time			= DAY;
+	skyColor		= DaySkyColor;
+	lerpPos			= 0;
+	secondsInADay	= 20.0f;
+	currentLight	= Day;
+	timeRunning		= true;
 }
 
+// rotate through time states and lerp between pre-set dirlights
+// the resulting lerped dirlight is saved and synced to shader later
 void Sun::update(float deltaTime) {
 	if (!timeRunning) deltaTime = 0;
 
@@ -72,6 +74,7 @@ void Sun::syncWithShader(Shader shader) {
 	shader.setVec3("dirLight.specular", currentLight.specular);
 }
 
+// get skycolor can be use as a skybox in combination with glClearColor
 glm::vec3 Sun::getSkyColor() {
 	return skyColor;
 }
@@ -90,8 +93,10 @@ std::string Sun::getTimeString() {
 	float minutes;
 	switch (time) {
 	case DAY:
+		// get time of the day in minutes
 		minutes = lerp(720, 1080, lerpPos);
 		rtrString = "Day, ";
+		// convert minutes to clock format
 		getTimeFromMinuteInString(minutes, rtrString);
 		break;
 	case NOON:
