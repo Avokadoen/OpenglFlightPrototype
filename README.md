@@ -1,3 +1,4 @@
+<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/frontpage.png" height="450" width="900" />
 
 # Graphics height map
 
@@ -11,8 +12,6 @@
 - Choose build at the upper part of the fullscreen
 
 - You can also download the prebuilt version "builtGame.rar" from the repo
-
-### [Project Report (not made yet)]()
 
 ### [To-Do List](TODO-LIST.md)
 
@@ -60,12 +59,14 @@
 			- **L** adds to your z, **J** subtracts from it
 			- **Y** adds to your y, **H** subtracts from it
 			- **mouse** to look around
+			- **scroll wheel** to zoom in/out
 		- FREEMOVE
 			- **I** moves you forward relative to your orientation
 			- **K** moves you backwards relative to your orientation
 			- **J** moves you left relative to your orientation
 			- **L** moves you right relative to your orientation
 			- **mouse** to look around
+			- **scroll wheel** to zoom in/out
 - Utility
 	- **f2** toggle between fullscreen and windowed. Going to fullscreen will save the screen state and apply it when going back to windowed
 	- **esc** will exit the program

@@ -48,7 +48,7 @@ float lastFrame = 0.0f;
 bool lightToggle = false;
 
 // The world:
-Terrain terrain(150.0f, 1.0f);
+Terrain terrain(200.0f, 1.3f);
 Sun theSun;
 
 // text
