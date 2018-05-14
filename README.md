@@ -20,13 +20,14 @@
 
 ### keybindings
 <img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" >
-##### Description:
+##### Description
 - Color coding:
 	- Green: 	season
 	- Purple: 	day/night cycle
 	- Yellow: 	air plane controls
 	- Magenta: 	debug features
 	- Red:		Camera controls
+	- Orange:	Utility
 - Seasons:
 	- 1 makes it spring
 	- 2 makes it summe
@@ -64,6 +65,9 @@
 			- j moves you left relative to your orientation
 			- l moves you right relative to your orientation
 			- mouse to look around
+- Utility
+	- f2 toggle between fullscreen and windowed. Going to fullscreen will save the screen state and apply it when going back to windowed
+	- esc will exit the program
 
 ##### Some sources:
 - https://learnopengl.com/
