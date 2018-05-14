@@ -3,8 +3,7 @@
 # Graphics height map
 
 ## Author
-- [Akselhj, Aksel Hjerpbakk](https://github.com/Avokadoen) (997816)
-
+- [Akselhj, Aksel Hjerpbakk](https://github.com/Avokadoen) (997816
 
 ### To build the project (windows only for now):
 - simply cmake from repo directory (configure, generate)
@@ -14,7 +13,10 @@
 - select either debug or release from the drop down menu on the top of the screen
 - choose build at the upper part of the fullscreen
 
+
 - You can also download the prebuilt version "builtGame.rar" from the repo
+
+### [A quick rundown of features](https://www.youtube.com/watch?time_continue=178&v=7Pe-KrFiP58)
 
 ### [To-Do List](TODO-LIST.md)
 
