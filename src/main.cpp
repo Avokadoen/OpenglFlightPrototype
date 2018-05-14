@@ -120,7 +120,7 @@ int main() {
 	Shader textShader("shaders/freetype.vert", "shaders/freetype.frag");
 
 	// terrain init
-	terrain.loadHeightMapData("assets/heightmap/height100.png");
+	terrain.loadHeightMapData("assets/heightmap/height50.png");
 	terrain.createTerrainMesh(0, 0, glm::vec3(0));
 	Shader terrainShader("shaders/terrainShader.vert", "shaders/terrainShader.frag");
 

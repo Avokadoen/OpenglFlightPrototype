@@ -33,3 +33,9 @@
 	- Random int values
 - https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
 	- Lerp
+- ##### All lighting
+- https://learnopengl.com/Lighting/Materials
+- https://learnopengl.com/Lighting/Basic-Lighting
+- https://learnopengl.com/Lighting/Lighting-maps
+- https://learnopengl.com/Lighting/Light-casters
+- https://learnopengl.com/Lighting/Multiple-lights

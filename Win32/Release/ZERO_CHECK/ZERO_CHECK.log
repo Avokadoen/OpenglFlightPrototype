@@ -1,16 +1,13 @@
 ﻿  Checking Build System
-  CMake is re-running because D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build/CMakeFiles/generate.stamp is out-of-date.
-    the file 'D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/CMakeLists.txt'
-    is newer than 'D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build/CMakeFiles/generate.stamp.depend'
-    result='-1'
-  -- Selecting Windows SDK version 10.0.15063.0 to target Windows 10.0.16299.
-  -- Could NOT find Vulkan (missing: VULKAN_LIBRARY VULKAN_INCLUDE_DIR) 
-  -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
-  -- Using Win32 for window creation
-  -- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
-  -- Creating directory D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build/freetype-2.9/include/freetype/config
-  -- Creating file D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build/freetype-2.9/include/freetype/config/ftconfig.h
-  -- Creating file D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build/freetype-2.9/include/freetype/config/ftoption.h
-  -- Configuring done
-  -- Generating done
-  -- Build files have been written to: D:/Users/Avokado/Documents/Programmering/GFX prog/gfx project/gfx project/build
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/glfw-3.2.1/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/glfw-3.2.1/src/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/contrib/zlib/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/contrib/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/contrib/irrXML/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/code/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/tools/assimp_cmd/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/test/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/assimp/test/headercheck/CMakeFiles/generate.stamp is up-to-date.
+  CMake does not need to re-run because D:/Users/Avokado/Documents/Programmering/GFX prog/eksamen/AkselhjExamRepo2531/build/freetype-2.8/CMakeFiles/generate.stamp is up-to-date.
