@@ -8,12 +8,6 @@
 
 #include <vector>
 
-
-
-// TODO: RIP APART!!! (modularity.)
-
-
-
 class LoadedModel : public Model
 {
 public:

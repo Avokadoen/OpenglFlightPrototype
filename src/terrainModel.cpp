@@ -8,9 +8,7 @@
 Terrain::Terrain(float maxHeight, float blockScale) {
 	this->maxHeight		= maxHeight;
 	this->blockScale	= blockScale;
-	yOffset				= 0.0f;
-	yScale				= 1.0f;
-	lerpRange			= 0.05f;
+
 	seasonModifier		= 0.0f;
 	seasonDirection		= 1;
 	runThroughSeason	= true;
@@ -149,27 +147,27 @@ void Terrain::createTerrainMesh(float meshMaxHeight, float meshMinHeight, glm::v
 	meshes.push_back(mesh);
 }
 
-void Terrain::generateIndices() {
+void Terrain::generateIndices() {	
 	
-	// 2 triangles for every quad of the terrain mesh
 	const unsigned int numTriangles = (imageWidth - 1) * (imageHeight - 1) * 2;
 
 	// 3 indices for each triangle in the terrain mesh
-
 	unsigned int index = 0; // Index in the index buffer
 	for (unsigned int y = 0; y < (imageHeight - 1); y++)
 	{
 		for (unsigned int x = 0; x < (imageWidth - 1); x++)
 		{
 			int vertexIndex = (y * imageWidth) + x;
-			// Top triangle (T0)
-			indices.push_back(vertexIndex);                           // V0
-			indices.push_back(vertexIndex + imageWidth);		// V3
-			indices.push_back(vertexIndex + 1);                      // V1
-																	// Bottom triangle (T1)
-			indices.push_back(vertexIndex + 1);                           // V0
-			indices.push_back(vertexIndex + imageWidth + 1);            // V2
-			indices.push_back(vertexIndex + imageWidth);        // V3
+
+			// Top triangle
+			indices.push_back(vertexIndex);                          
+			indices.push_back(vertexIndex + imageWidth);		
+			indices.push_back(vertexIndex + 1);                     
+				
+			// bottom triangle
+			indices.push_back(vertexIndex + 1);                         
+			indices.push_back(vertexIndex + imageWidth + 1);          
+			indices.push_back(vertexIndex + imageWidth);       
 		}
 	}
 
@@ -182,15 +180,20 @@ void Terrain::generateNormals(int offset) {
 		glm::vec3 v1 = vertices[indices[i + 1]].Position;
 		glm::vec3 v2 = vertices[indices[i + 2]].Position;
 
+		// we find v2 and v1 vector from face's space instead of global space
+		// and calculate the normal from v0 
 		glm::vec3 normal = glm::cross(v2 - v0, v1 - v0);
 
+		// apply v0 normal onto all other vertices so that we can find average normal later
 		vertices[indices[i + 0]].Normal += normal;
 		vertices[indices[i + 1]].Normal += normal;
 		vertices[indices[i + 2]].Normal += normal;
 	}
 }
 
+// send data to shader
 void Terrain::bindMaterialsToShader(Shader shader) {
+	
 	shader.setFloat("maxHeight", maxHeight);
 	shader.setFloat("seasonModifier", seasonModifier);
 	shader.setFloat("contourStroke", activeContour);
@@ -267,11 +270,13 @@ std::string Terrain::getSeasonString() {
 	}
 }
 
+// find the position of the middle vertice in the terrain
 glm::vec3 Terrain::getActualPos() {
 	auto middle = vertices.begin() + ((imageHeight / 2) * imageWidth) + (imageWidth / 2);
 	return middle->Position;
 }
 
+// choose a random vertice within given(hardcoded) bounds
 glm::vec3 Terrain::getRandomValidPos() {
 	std::mt19937 rng;
 	rng.seed(std::random_device()());
@@ -279,9 +284,4 @@ glm::vec3 Terrain::getRandomValidPos() {
 																	(int)(imageWidth * (imageHeight / 1)));
 	auto point = vertices.begin() + dist6(rng);
 	return point->Position;
-}
-
-float Terrain::getWidth() {
-	auto withVertex = vertices.begin() + imageWidth -1;
-	return withVertex->Position.x;
 }

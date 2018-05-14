@@ -11,9 +11,7 @@ public:
 
 	Terrain(float maxHeight = 500.0f, float blockScale = 2.0f);
 	void update(float deltaTime);
-	int nrComponents;
-	int imageWidth;
-	int imageHeight;
+	
 
 	unsigned int fileSize;
 	unsigned char* imageData;
@@ -33,7 +31,7 @@ public:
 	std::string getSeasonString();
 	glm::vec3 getActualPos();
 	glm::vec3 getRandomValidPos();
-	float getWidth();
+
 protected:
 	const int SecondsForAYear = 60;
 	const float contourStroke = 0.002f;
@@ -85,6 +83,10 @@ protected:
 
 	
 private:
+	int nrComponents;
+	int imageWidth;
+	int imageHeight;
+
 	void generateIndices();
 	void generateNormals(int offset);
 	std::vector<float>	heightValues;
@@ -94,9 +96,6 @@ private:
 
 	bool runThroughSeason;
 
-	float highestPoint;
-	float yOffset;
-	float yScale;
 	float maxHeight;
 	float blockScale;
 	float lerpRange;
