@@ -16,7 +16,9 @@
 
 - You can also download the prebuilt version "builtGame.rar" from the repo
 
-### [A quick rundown of features](https://www.youtube.com/watch?time_continue=178&v=7Pe-KrFiP58)
+<a href="https://www.youtube.com/watch?time_continue=178&v=7Pe-KrFiP58
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 ### [To-Do List](TODO-LIST.md)
 
