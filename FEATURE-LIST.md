@@ -10,7 +10,7 @@
 - full control over the seasons
 - dynamic day/night cycle that can be controlled
 - random generated trees on the surface
-- controllable airplane
+- controllable airplane (with specular)
 - respawn of airplane, either randomly or in the center of the map
 - first person cockpit
 - toggle of fullscreen
