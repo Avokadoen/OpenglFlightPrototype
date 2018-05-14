@@ -10,7 +10,7 @@
 - Select either debug or release
 - Choose build at the upper part of the fullscreen
 
-- You can also download the prebuilt version "buildedGame.rar" from the repo
+- You can also download the prebuilt version "builtGame.rar" from the repo
 
 ### [Project Report (not made yet)]()
 
@@ -19,8 +19,9 @@
 ### [Known-Bugs List](KNOWN-BUGS.md)
 
 ### keybindings
-<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" >
-##### Description
+<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" />
+
+##### Description:
 - Color coding:
 	- Green: 	season
 	- Purple: 	day/night cycle
