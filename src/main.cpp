@@ -46,7 +46,6 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-bool lightToggle = false;
 bool writeHud = true;
 
 // The world:
