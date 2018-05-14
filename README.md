@@ -20,7 +20,7 @@
 
 ### [Known-Bugs List](KNOWN-BUGS.md)
 
-### Feature list
+### [Feature list](FEATURE-LIST.md)
 
 ### keybindings
 <img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/keybindings.png" height="300" width="700" />
@@ -75,6 +75,8 @@
 - Utility
 	- **f2** toggle between fullscreen and windowed. Going to fullscreen will save the screen state and apply it when going back to windowed
 	- **esc** will exit the program
+
+<img src="https://github.com/Avokadoen/AkselhjExamRepo2531/blob/master/trees.png" height="300" width="700" />
 
 ##### Some sources:
 - https://learnopengl.com/

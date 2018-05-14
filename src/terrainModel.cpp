@@ -302,6 +302,7 @@ glm::vec3 Terrain::getRandomTreeValidPos() {
 
 }
 
+// generates transforms that can be used to place objects on the surface of the map
 std::vector<glm::mat4> Terrain::generateTreeTransforms(int amount) {
 	std::vector<glm::mat4> transforms;
 
